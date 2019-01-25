@@ -13,31 +13,34 @@ const connections = []
 io.on('connection', function(client){
     connections.push({ client,"clientId" : connections.length+1 } );
     console.log('a user connected');
-    for(var i = 0; i<connections.length; i++)
-  {
-      connections[i].emit("hello", connections.length);
-  }  
-  });
-
-io.on('disconnect', function(client){
-    var clientRemoved =  false;
-    var clientIndex = 0;
-    while(!clientRemoved)
-    {
-        if(client===connections[clientIndex].client)
-        {
-            connections.pop(clientIndex);
-            clientRemoved=true;
-        }
-    }
-
-    for(var i = 0; i<connections.length; i++)
-    {
-        connections[i].client.emit("clientId", connections[i].clientId);
-    }
     
+    emitAll(connections.length);
+   /* for(var i = 0; i<connections.length; i++)
+    {
+      connections[i].client.emit("hello", connections.length);
+    }*/
     
-}
+    client.on('disconnect', function() {
+        
+        console.log('Got disconnect!');
+  
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        console.log(i);
+        var disconnectId = connections[i].clientId;
+        connections.splice(i, 1);
+        emitAll("Client " +  disconnectId + " disconnected" ); 
+     });
+
+      
+  });  
+
+  const emitAll = (data) => {
+      for(var i = 0; i<connections.length; i++)
+      {
+          connections[i].client.emit("data", data);
+      }
+  }
+
   
 
 

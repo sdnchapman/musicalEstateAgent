@@ -1,7 +1,7 @@
 console.log('Test file loaded');
 var socket = io({transports: ['websocket'], upgrade: false});
 
-socket.on('hello', function (length) {
+socket.on('data', function (length) {
     console.log(length);
     socket.emit('my other event', { my: 'data' });
     setTimeout(() => {
