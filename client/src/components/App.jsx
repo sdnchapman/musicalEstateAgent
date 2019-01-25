@@ -1,9 +1,11 @@
 import React from 'react';
+import Login from './Login';
+import "./styles.scss";
 
 const App = () => {
   return (
-    <div>
-      YAHHH
+    <div className="app-container">
+      <Login/>
     </div>
   );
 };
