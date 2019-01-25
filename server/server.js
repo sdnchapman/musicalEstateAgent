@@ -11,7 +11,7 @@ app.get('/', function(req, res,next) {
 const connections = []
 
 io.on('connection', function(client){
-    connections.push(client);
+    connections.push({ client,"clientId" : connections.length+1 } );
     console.log('a user connected');
     for(var i = 0; i<connections.length; i++)
   {
@@ -19,6 +19,25 @@ io.on('connection', function(client){
   }  
   });
 
+io.on('disconnect', function(client){
+    var clientRemoved =  false;
+    var clientIndex = 0;
+    while(!clientRemoved)
+    {
+        if(client===connections[clientIndex].client)
+        {
+            connections.pop(clientIndex);
+            clientRemoved=true;
+        }
+    }
+
+    for(var i = 0; i<connections.length; i++)
+    {
+        connections[i].client.emit("clientId", connections[i].clientId);
+    }
+    
+    
+}
   
 
 
