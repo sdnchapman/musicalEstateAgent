@@ -9,3 +9,4 @@ app.get('/', function(req, res,next) {
 });
 
 server.listen(8080);
+console.log('Server is alive');
