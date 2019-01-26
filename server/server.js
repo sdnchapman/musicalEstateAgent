@@ -10,17 +10,99 @@ app.get('/', function(req, res,next) {
 
 const connections = []
 
+var idCounter = 1;
+
 io.on('connection', function(client){
-    connections.push(client);
+    var isVip = false;
+    /*if(connections.length===0){
+        isVip = true;
+    }
+    else{
+        isVip = false;
+    }*/
+    connections.push({"clientData": {
+                    "type" : "test",
+                    "clientId": idCounter,
+                    "username": "",
+                    "score" : 0,
+                    isVip},
+                    client})
+        
+    client.emit("clientInfo" , {"clientId": idCounter,
+                                "vip": isVip});
+    idCounter++;
     console.log('a user connected');
-    for(var i = 0; i<connections.length; i++)
-  {
-      connections[i].emit("hello", connections.length);
-  }  
+    
+    emitAll(connections.length);
+    
+    client.on('disconnect', function() {
+        
+        console.log('Got disconnect!');
+  
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        console.log(i);
+        var disconnectId = connections[i].clientData.clientId;
+        var newVip = false;
+        if(connections[i].clientData.isVip)
+        {
+            newVip = true;
+        }
+        connections.splice(i, 1);
+        emitAll("Client " +  disconnectId + " disconnected" ); 
+
+        if(connections.length >= 1 && newVip)
+        {
+            var vipIndex = 0;
+            var vipFound = false;
+            while(!vipFound)
+            {
+                if(connections[vipIndex].clientData.username !== "")
+                {
+                    vipFound = true;
+                    connections[0].clientData.isVip = true;
+                    connections[0].client.emit("NEW_VIP" , {"clientId": connections[0].clientData.clientId,
+                    "vip": true});
+                }
+                else{
+                    vipIndex++;
+                }
+            }          
+        }
+     });
+
+     client.on('REGISTER_USERNAME', function(username){
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        connections[i].clientData.username = username;
+        console.log(username);
+        if(connections.findIndex((conClient)=>(conClient.clientData.isVip)) === -1)
+        {
+            connections[i].clientData.isVip = true;
+        }
+        
+        connections[i].client.emit("REGISTERED" , {"clientId": connections[i].clientData.clientId,
+        "vip": connections[i].clientData.isVip});
+     });
+
+     client.on('RECEIVE_SCORE', function(score){
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        connections[i].clientData.username += score;
+     });
+
+     client.on('REGISTER_TYPE', function(team){
+        var i = connections.findIndex((conClient)=>(conClient.client===team));
+        connections[i].clientData.type = team;
+     });
   });
 
   
+   
 
+  const emitAll = (data) => {
+      for(var i = 0; i<connections.length; i++)
+      {
+          connections[i].client.emit("data", data);
+      }
+  }
 
 server.listen(8080);
 console.log('Server is alive');
