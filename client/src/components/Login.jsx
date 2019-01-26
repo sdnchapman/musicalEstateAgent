@@ -11,7 +11,7 @@ const Login = () => {
 const Button = () => {
   return (
     <button className="button">
-      I'm a Login Button
+      Join
     </button>
   );
 };
