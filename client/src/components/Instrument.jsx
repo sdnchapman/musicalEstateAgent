@@ -2,7 +2,14 @@ import React, { Component, Fragment } from 'react';
 import MIDISounds from 'midi-sounds-react';
 import { state } from "../../../common/gameConstants";
 
-const song = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
+const trumpets_hard_notes = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
+const strings_hard_notes = [0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 78, 0, 79, 0, 73, 0, 73, 0, 69, 62, 0, 0, 66, 0, 0, 69, 0, 0, 66, 0, 0, 69, 0, 0, 69, 0, 0];
+const bass_hard_notes = [43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 50, 0, 38, 49, 0, 43, 0, 0, 38, 0, 0, 0, 0, 38, 0];
+
+const trumpets_easy_notes = [60, 0, 64, 59, 0, 57, 0, 0, 0, 0, 0, 0, 55, 0, 57, 0];
+const strings_easy_notes = [0, 0, 0, 0, 0, 0, 0, 69, 0, 76, 0, 79, 71, 0, 0, 0];
+const bass_easy_notes = [0, 0, 64, 59, 0, 45, 0, 0, 0, 40, 0, 0, 0, 0, 45, 0];
+
 
 export default class Instrument extends Component {
 
