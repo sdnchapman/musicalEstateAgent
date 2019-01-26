@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { timingSafeEqual } from 'crypto';
 let time = 0;
 let lastTime = performance.now();
 const noteTravelTime = 2;
@@ -7,26 +8,32 @@ let noteSpeed;
 const laneWidth = 10;
 const colors = ['red', 'green', 'blue'];
 const redNodes = [
-  [0, 30],
-  [1, 30],
-  [1, 30],
-  [0, 30],
-  [0, 30],
-  [1, 30],
-  [0, 30],
+  [1, 1],
+  [0, 0],
+  [1, 1],
+  [0, 0],
+  [1, 1],
+  [1, 1],
+  [0, 0],
 ];
 
 class Note {
-  constructor(x, y, color) {
+  constructor(x, y, color, screenHeight, length) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.width = 50;
     this.height = 50;
+    this.screenHeight = screenHeight;
+    this.isOffScreen = false;
+    this.length = length;
   }
 
   update() {
     this.y += noteSpeed;
+    if (this.y > this.screenHeight) {
+      this.isOffScreen = true;
+    }
   }
 }
 
@@ -37,6 +44,10 @@ class ConductorView extends Component {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
+    this.state = {
+      gameStart: false,
+      startCountDown: 3,
+    };
   }
 
   initCanvas() {
@@ -51,21 +62,34 @@ class ConductorView extends Component {
     lastTime = newTime;
 
     distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
-  
-    gameObjects = [
-      ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index+1.5), '#ffa0a0')),
-      ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index+1.5), '#a0ffa0')),
-      ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index+1.5), '#a0a7ff')),
-    ];
-    
+
+    redNodes.forEach(([note, length], index) => {
+      if (note === 1) {
+        gameObjects.push(new Note(0, (distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2, length))
+      }
+    });
+
+    // gameObjects = [
+    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#ffa0a0', canvas.height)),
+    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#a0ffa0', canvas.height)),
+    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#a0a7ff', canvas.height)),
+    // ];
+
 
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
   }
 
   update(deltaTime) {
-    gameObjects.forEach(obj => {
+    let destroyNotes = [];
+    gameObjects.forEach((obj, index) => {
       obj.update(deltaTime);
+      if (obj.isOffScreen) {
+        destroyNotes.push(index);
+      }
     });
+    for (let i = destroyNotes.length - 1; i >= 0; i--) {
+      gameObjects.splice(destroyNotes[i], 1);
+    }
   }
 
   renderGame(canvas, ctx) {
@@ -85,7 +109,7 @@ class ConductorView extends Component {
       0,
       canvas.height / 1.1,
       canvas.width,
-      laneWidth
+      laneWidth,
     );
 
     // notes
@@ -103,8 +127,19 @@ class ConductorView extends Component {
           xPos *= 3;
           break;
       }
-      ctx.fillRect(xPos - obj.width/2, obj.y, obj.width, obj.height);
+      // note
+      ctx.fillRect(xPos - obj.width / 2, obj.y, obj.width, obj.height);
+      //note length
+      ctx.fillRect(xPos - obj.width / 6, obj.y - (distanceToBar / 2) * obj.length, obj.width / 3, (distanceToBar / 2) * obj.length);
     });
+
+    if (!this.state.gameStart) {
+      ctx.fillStyle = 'black';
+      ctx.font = "240px Arial";
+      let countDown = Math.ceil(3 - time);
+      if (countDown <= -1) { this.setState({ gameStart: true }) }
+      ctx.fillText(countDown <= 0 ? '🏁' : countDown, canvas.width / 2 - 70, canvas.height / 2);
+    }
   }
 
   animationFrame(canvas, ctx, deltaTime) {
@@ -113,7 +148,10 @@ class ConductorView extends Component {
 
     noteSpeed = distanceToBar / (noteTravelTime / deltaTime);
 
-    this.update(deltaTime);
+    if (this.state.gameStart) {
+      this.update(deltaTime);
+    }
+
     this.renderGame(canvas, ctx);
 
     const newDelta = (newTime - lastTime) / 1000;
