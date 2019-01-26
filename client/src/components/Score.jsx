@@ -21,6 +21,9 @@ export default class Score extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      new Audio('/whooo.wav').play()
+    }, Math.random() * 1500)
     this.requestScore();
   }
 

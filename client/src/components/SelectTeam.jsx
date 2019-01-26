@@ -9,6 +9,12 @@ class SelectTeam extends Component {
     this.onGameStart = this.onGameStart.bind(this);
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      new Audio('/clapping.wav').play()
+    }, Math.random() * 1500)
+  }
+
   componentWillMount() {
     socket.on(state.TEAM_SELECTED, this.setTeam);
     socket.on(state.GAME_START, this.onGameStart);
