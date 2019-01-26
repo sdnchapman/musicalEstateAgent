@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import {state} from "../../../common/gameConstants";
 
+
+const bass = [0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
+const strings = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0];
+const trumpets = [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0];
+
 const noteTravelTime = 2;
 const laneWidth = 10;
 const colors = ['red', 'green', 'blue'];
-const redNodes = [
-  [1, 1],
-  [0, 0],
-  [1, 1],
-  [0, 0],
-  [1, 1],
-  [1, 1],
-  [0, 0],
-];
+const redNodes = bass;
+
 
 class Note {
   constructor(x, y, color, screenHeight, length) {
@@ -91,17 +89,19 @@ class ConductorView extends Component {
 
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
-    redNodes.forEach(([note, length], index) => {
-      if (note === 1) {
-        this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2, length))
+    bass.forEach((note, index) => {
+      if (bass[index] === 1) {
+        this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2))
+      }
+      if(strings[index]) {
+        this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0ffa0', canvas.height * 2))
+      }
+      if(trumpets[index]) {
+        this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
 
-    // gameObjects = [
-    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#ffa0a0', canvas.height)),
-    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#a0ffa0', canvas.height)),
-    //   ...redNodes.map((note, index) => new Note(0, (distanceToBar / 2) * -(index), '#a0a7ff', canvas.height)),
-    // ];
+    console.log(this.gameObjects)
 
 
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
@@ -115,9 +115,9 @@ class ConductorView extends Component {
         destroyNotes.push(index);
       }
     });
-    for (let i = destroyNotes.length - 1; i >= 0; i--) {
-      this.gameObjects.splice(destroyNotes[i], 1);
-    }
+    // for (let i = destroyNotes.length - 1; i >= 0; i--) {
+    //   this.gameObjects.splice(destroyNotes[i], 1);
+    // }
   }
 
   renderGame(canvas, ctx) {

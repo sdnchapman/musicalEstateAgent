@@ -44,18 +44,23 @@ class SelectTeam extends Component {
   render() {
     const {team} = window;
     return(
-      team === undefined ?
       <div>
-        <h2>Select Your Team!</h2>
+        {team === undefined ? <h2>Select Your Team!</h2>: 
+          <div>
+            <h1>You are in the {team} team!</h1>
+            <h3>Soon you will be given your instrument</h3>
+            <h3>Pay attention to the conductor</h3>
+            <h4>When the conductor points at you play it by pressing the button</h4>
+            <br/>
+            <h4>Change Team</h4>
+          </div>
+        }
         <TeamButton name="red" onSelectTeam={this.onSelectTeam} />
         <TeamButton name="green" onSelectTeam={this.onSelectTeam}/>
         <TeamButton name="blue" onSelectTeam={this.onSelectTeam}/>
       </div>
-      :
-      <div>
-        <h2>You are the {team} team</h2>
-        <h3>Wait for the conductor to start</h3>
-      </div>
+      
+
     )
   }
 }
