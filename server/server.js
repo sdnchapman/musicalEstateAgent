@@ -92,6 +92,10 @@ io.on('connection', function(client){
         var i = connections.findIndex((conClient)=>(conClient.client===team));
         connections[i].clientData.type = team;
      });
+
+     client.on('EVERYONE_READY', function(){
+        selectConductor();
+     });
   });
 
   const selectConductor = () => {
