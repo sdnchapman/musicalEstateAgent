@@ -199,7 +199,7 @@ class ConductorView extends Component {
 
   render() {
     return (
-      <div style={{ height: '80vh' }}>
+      <div className="container mt-4 mb-4 p-4 d-flex bg-white" style={{ height: '80vh' }}>
         <canvas id="canvas" ref={this.canvasRef} />
       </div>
     );
