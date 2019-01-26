@@ -208,33 +208,73 @@ io.on('connection', function(client){
 
         var playerIndex = connections.findIndex((conClient)=>(conClient.client===client));
 
+        if(redPlayers === 0)
+        {
+            redScore=0;
+            redPercentage=0;
+        }
+        else{
+            redScore=redScore/redPlayers;
+            redPercentage=redPercentage/redPlayers;
+        }
+
+        if(greenPlayers === 0)
+        {
+            greenScore=0;
+            greenPercentage=0;
+        }
+        else{
+            greenScore=greenScore/greenPlayers;
+            greenPercentage=greenPercentage/greenPlayers;
+        }
+
+        if(bluePlayers === 0)
+        {
+            blueScore=0;
+            bluePercentage=0;
+        }
+        else{
+            blueScore=blueScore/bluePlayers;
+            bluePercentage=bluePercentage/bluePlayers;
+        }
+
+
+
+
         if(connections[playerIndex].clientData.type === "CONDUCTOR")
         {
+            var conductorPlayerScore = 0;
+            var conductorPlayerPercentage = 0;
+
+            if(redPlayers >= 1 || bluePlayers >= 1 || greenPlayers >= 1 )
+            {
+                conductorPlayerScore = (redScore + blueScore + greenScore)/(redPlayers + bluePlayers + greenPlayers);
+                conductorPlayerPercentage =  (redPercentage + bluePercentage + greenPercentage)/(redPlayers + bluePlayers + greenPlayers);
+            }   
+
             client.emit("FINAL_SCORE",{
-                "playerScore": (redScore + blueScore + greenScore)/(redPlayers + bluePlayers + greenPlayers),
-                "playerPercentage":(redPercentage + bluePercentage + greenPercentage)/(redPlayers + bluePlayers + greenPlayers),
-                "redScore" : redScore/redPlayers,
-                "greenScore": greenScore/greenPlayers,
-                "blueScore" : blueScore/bluePlayers,
-                "redPercentage" : redPercentage/redPlayers,
-                "bluePercentage" : bluePercentage/bluePlayers,
-                "greenPercentage" : greenPercentage/greenPlayers            
+                "playerScore": conductorPlayerScore,
+                "playerPercentage":conductorPlayerPercentage,
+                redScore,
+                greenScore,
+                blueScore,
+                redPercentage,
+                bluePercentage,
+                greenPercentage             
             });
         }
         else{
             client.emit("FINAL_SCORE",{
                 "playerScore": connections[playerIndex].clientData.score,
                 "playerPercentage":connections[playerIndex].clientData.score/connections[playerIndex].clientData.numberOfHits,
-                "redScore" : redScore/redPlayers,
-                "greenScore": greenScore/greenPlayers,
-                "blueScore" : blueScore/bluePlayers,
-                "redPercentage" : redPercentage/redPlayers,
-                "bluePercentage" : bluePercentage/bluePlayers,
-                "greenPercentage" : greenPercentage/greenPlayers            
+                redScore,
+                greenScore,
+                blueScore,
+                redPercentage,
+                bluePercentage,
+                greenPercentage            
             });
         }
-
-        
 
         console.log("Final Scores Sent");
      });
