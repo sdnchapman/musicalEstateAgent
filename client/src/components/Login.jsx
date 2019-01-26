@@ -43,18 +43,19 @@ export default class Login extends Component {
   render() {
     console.log('trees are wierd');
     return (
-      <div className="login-container">
-        <div className="row p-4">
+      <div className="container">
+        <div className="row shadow-lg bg-white p-4">
           <img src="/logo_gif.gif" className="col-md-6 col-xs-12"/>
           <div className="col-md-6 col-xs-12 text-left">
             <h2 className="text-danger mb-0">A social musical construction experience</h2>
             <h4 className="text-secondary">On the beat of property</h4>
           </div>
         </div>
-        <div className="row p-4 bg-danger text-light">
+        <div className=" p-4 mt-4 shadow-lg row bg-danger text-light">
           <div className="col-12">
             <h2 className="text-dark">Join our team Today!</h2>
-            <p>We need talented musicians and conductors to join our unique property sales Orchestra. Enter in any name below and click the join button for a delightful interview experience.</p>
+            <p>We need talented musicians and conductors to join our unique property sales Orchestra. Enter in any name
+              below and click the join button for a delightful interview experience.</p>
           </div>
           <div className="col-12 col-md-6">
             <input className="form-control" placeholder="Enter username here!" value={this.state.username}
@@ -64,7 +65,7 @@ export default class Login extends Component {
             </button>
           </div>
         </div>
-        <div className="row p-4 bg-info text-light">
+        <div className="row shadow-lg p-4 mt-4 bg-info text-light">
           <div className="col-md-6 offset-md-2 col-8">
             <h1>Set to be the first Grammy Award Winning Estate Agents</h1>
           </div>
