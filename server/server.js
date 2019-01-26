@@ -57,7 +57,7 @@ io.on('connection', function(client){
         }
      });
 
-     client.on('receiveUsername', function(username){
+     client.on('REGISTER_USERNAME', function(username){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username = username;
      });
