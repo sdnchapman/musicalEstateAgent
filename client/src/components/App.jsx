@@ -1,10 +1,10 @@
 import React from 'react';
-import Login from './Login';
 import {HashRouter as Router, Route} from 'react-router-dom';
-import "./styles.scss";
+import Login from './Login';
 import Score from "./Score";
 import Lobby from "./Lobby";
 import SelectTeam from "./SelectTeam";
+import "./styles.scss";
 
 
 const App = () => {
@@ -13,9 +13,9 @@ const App = () => {
             <Router>
                 <div>
                     <Route path="/" exact component={Login}/>
-                    <Route path="/score/" exact component={Score}/>
                     <Route path="/lobby/" exact component={Lobby}/>
                     <Route path="/teams/" exact component={SelectTeam}/>
+                    <Route path="/score/" exact component={Score}/>
                 </div>
             </Router>
         </div>
