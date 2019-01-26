@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class ConductorSetup extends Component {
     render() {
@@ -13,7 +14,7 @@ export default class ConductorSetup extends Component {
                 <p>Look at the second group and announce to them that they are the Green group.</p>
                 <p>Look at the third group and announce to them that they are the Blue group.</p>
                 <p>Once your orchestra are ready click the button below to begin!</p>
-                <button>Begin the song!</button>
+                <Link to="conductor"><button>Begin the song!</button></Link>
             </div>
         );
     }
