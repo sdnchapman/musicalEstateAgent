@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import {state} from "../../../common/gameConstants";
 
+const easy_trumpets = [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0];
+const easy_strings = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0];
+const easy_bass = [0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 
-const bass = [0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
-const strings = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0];
-const trumpets = [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0];
+const hard_trumpets = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0];
+const hard_strings = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0];
+const hard_bass = [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 
 const noteTravelTime = 2;
 const laneWidth = 10;
 const colors = ['red', 'green', 'blue'];
-const redNodes = bass;
 
 
 class Note {
@@ -38,7 +40,6 @@ class ConductorView extends Component {
     this.canvasRef = React.createRef();
     this.state = {
       gameStart: false,
-      startCountDown: 3,
       shouldUpdate: true,
       songId: null,
       startTime: null,
@@ -51,6 +52,8 @@ class ConductorView extends Component {
 
     this.onSongEnd = this.onSongEnd.bind(this);
     this.onGameOver = this.onGameOver.bind(this);
+
+    this.countdown = 0;
   }
 
   onSongEnd() {
@@ -63,9 +66,8 @@ class ConductorView extends Component {
     const startTime = params.get('startTime');
     this.setState({
       songId,
-      startTime,
+      startTime: new Date(startTime).getTime(),
     });
-    console.log('query params', songId, startTime);
     socket.on(state.GAME_OVER, this.onGameOver);
   }
 
@@ -90,20 +92,16 @@ class ConductorView extends Component {
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
     bass.forEach((note, index) => {
-      if (bass[index] === 1) {
+      if (trumpets[index] === 1) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2))
       }
       if(strings[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0ffa0', canvas.height * 2))
       }
-      if(trumpets[index]) {
+      if(bass[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
-
-    console.log(this.gameObjects)
-
-
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
   }
 
@@ -164,9 +162,9 @@ class ConductorView extends Component {
     if (!this.state.gameStart) {
       ctx.fillStyle = 'black';
       ctx.font = "240px Arial";
-      let countDown = Math.ceil(3 - this.time);
+      let countDown = (this.countdown/1000) - this.time;
       if (countDown <= -1) { this.setState({ gameStart: true }) }
-      ctx.fillText(countDown <= 0 ? '🏁' : countDown, canvas.width / 2 - 70, canvas.height / 2);
+      ctx.fillText(countDown <= 0 ? '🏁' : Math.floor(countDown), canvas.width / 2 - 70, canvas.height / 2);
     }
   }
 
@@ -189,7 +187,8 @@ class ConductorView extends Component {
   }
 
   componentDidMount() {
-    this.lastTime = performance.now()
+    this.countdown = this.state.startTime - new Date().getTime();
+    this.lastTime = performance.now();
     this.initCanvas();
   }
 

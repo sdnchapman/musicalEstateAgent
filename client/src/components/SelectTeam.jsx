@@ -27,8 +27,9 @@ class SelectTeam extends Component {
   }
 
   onGameStart(response) {
-    const {startTime, songId} = response;
-    this.props.history.push(`/instrument?songId=${songId}&startTime=${startTime}`);
+    const {startTime, songId, clientData:{type} } = response;
+    console.log(response)
+    this.props.history.push(`/instrument?songId=${songId}&startTime=${startTime}&team=${type}`);
   }
 
   setTeam(team) {
