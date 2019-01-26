@@ -76,11 +76,11 @@ io.on('connection', function(client){
         console.log(username);
         if(connections.findIndex((conClient)=>(conClient.clientData.isVip)) === -1)
         {
-            connections[0].clientData.isVip = true;
+            connections[i].clientData.isVip = true;
         }
         
-        connections[0].client.emit("REGISTERED" , {"clientId": connections[0].clientData.clientId,
-        "vip": connections[0].clientData.isVip});
+        connections[i].client.emit("REGISTERED" , {"clientId": connections[i].clientData.clientId,
+        "vip": connections[i].clientData.isVip});
      });
 
      client.on('RECEIVE_SCORE', function(score){
