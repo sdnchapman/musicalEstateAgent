@@ -24,7 +24,7 @@ export default class Login extends Component {
     const { vip, clientId } = response;
     window.isVip = vip;
     window.clientId = clientId;
-    this.context.router.history.push('/lobby');
+    this.props.history.push('/lobby');
   }
 
   onLoginClick() {
