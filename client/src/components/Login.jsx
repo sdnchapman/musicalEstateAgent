@@ -22,8 +22,10 @@ export default class Login extends Component {
 
   onRegistered(response) {
     const { vip, clientId } = response;
+    const {username} = this.state;
     window.isVip = vip;
     window.clientId = clientId;
+    window.username = username;
     this.props.history.push('/lobby');
   }
 
