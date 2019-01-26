@@ -18,6 +18,7 @@ export default class Instrument extends Component {
     }
     this.state = {
       gameStart: false,
+      lockNote: false,
     };
     this.time = 0;
     this.lastTime = 0;
@@ -35,23 +36,22 @@ export default class Instrument extends Component {
   }
 
   onClick() {
-    //brass section 2
     let score = 0;
-    if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5) {
-      score = 100 - (200 * Math.abs(this.notes[0][0] - this.time));
+    if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5 && !this.state.lockNote) {
+      score = Math.floor(100 - (200 * Math.abs(this.notes[0][0] - this.time)));
+      this.setState({lockNote: true});
+      let frequency = score >= 75 ? this.notes[0][1] : Math.floor((Math.random() * 20) + 50);
+      this.midiSounds.playChordNow(660, [frequency], 1);
     } else {
       score = 0;
     }
     socket.emit(state.REGISTER_SCORE, score);
-    let frequency = score >= 75 ? this.notes[0][1] : (Math.random() * 20) + 50;
-    this.midiSounds.playChordNow(660, [frequency], 1);
   }
 
   animationFrame(deltaTime) {
     let newTime = performance.now();
     this.time += deltaTime;
 
-    // console.log(this.time);
     if (this.time > 3 && !this.state.gameStart) {
       this.time = 0;
       this.setState({ gameStart: true });
@@ -61,10 +61,9 @@ export default class Instrument extends Component {
     }
 
     if (this.state.gameStart) {
-      // console.log(this.notes[5][0]);
       if (this.notes.length > 0 && this.time >= this.notes[0][0] + 0.5) {
         this.notes.splice(0, 1);
-        // note missed
+        this.setState({lockNote: false});
       }
     }
 
