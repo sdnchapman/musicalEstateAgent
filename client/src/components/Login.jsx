@@ -44,6 +44,7 @@ export default class Login extends Component {
     console.log('trees are wierd');
     return (
       <div className="login-container">
+        <img src="/logo_gif.gif" style={{flex: 1}}/>
         <input placeholder="Enter username here!" value={this.state.username} onChange={this.onUsernameChange} type="text" />
         <button className="button" onClick={this.onLoginClick}>
           I'm a Login Button
