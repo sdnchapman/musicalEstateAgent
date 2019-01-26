@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
+import { state } from '../../../common/gameConstants';
 
 export default class ConductorSetup extends Component {
   constructor(props) {
@@ -10,6 +10,20 @@ export default class ConductorSetup extends Component {
 
     this.onPreviousScreen = this.onPreviousScreen.bind(this);
     this.onNextScreen = this.onNextScreen.bind(this);
+    this.onStartGame = this.onStartGame.bind(this);
+    this.onGameStart = this.onGameStart.bind(this);
+  }
+
+  componentWillMount() {
+    socket.on(state.GAME_START, this.onGameStart);
+  }
+
+  componentWillUnmount() {
+    socket.removeListener(state.GAME_START, this.onGameStart);
+  }
+
+  onGameStart() {
+    this.props.history.push('/conductor/');
   }
 
   onNextScreen() {
@@ -24,6 +38,10 @@ export default class ConductorSetup extends Component {
     this.setState({
       screen: screen - 1,
     })
+  }
+
+  onStartGame() {
+    socket.emit(state.CONDUCTOR_READY);
   }
 
   render() {
@@ -96,7 +114,7 @@ export default class ConductorSetup extends Component {
           (screen === 8) && (
             <React.Fragment>
               <p>When you are ready to start playing, click the button below.</p>
-              <Link to="/conductor"><button>Begin the song!</button></Link>
+              <button onClick={this.onStartGame}>Begin the song!</button>
             </React.Fragment>
           )
         }
