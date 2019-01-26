@@ -8,6 +8,7 @@ Navigate to the client directory.
 ```
 npm install
 ```
+The client project doesn't install all its dependencies by default. You may need to install some manually.
 
 ####Run watch build
 ```
@@ -33,3 +34,5 @@ npm start
 
 Now the server application is running with a watch build. Server changes will automatically update.
 
+##Libraries
+http://concisecss.com/documentation/utils#colors

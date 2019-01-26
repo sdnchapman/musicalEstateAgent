@@ -11,7 +11,7 @@ import SelectTeam from "./SelectTeam";
 
 const App = () => {
     return (
-        <div className="app-container">
+        <div className="app-container _flex" class="_ms _ps _bg-background-light _text-center">
             <Router>
                 <div>
                     <Route path="/" exact component={Login}/>
