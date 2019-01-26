@@ -11,6 +11,7 @@ app.get('/', function(req, res,next) {
 const connections = []
 
 var idCounter = 1;
+var gameInProgress = false;
 
 io.on('connection', function(client){
     var isVip = false;
@@ -38,9 +39,6 @@ io.on('connection', function(client){
     emitAll(connections.length);
     
     client.on('disconnect', function() {
-        
-        
-  
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         console.log(i);
         var disconnectId = connections[i].clientData.clientId;
@@ -73,9 +71,15 @@ io.on('connection', function(client){
                 }
             }          
         }
+        if(connections.length === 0)
+        {
+            gameInProgress = false;
+        }
      });
 
      client.on('REGISTER_USERNAME', function(username){
+        if(!gameInProgress)
+        {
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username = username;
         console.log("ClientId " + connections[i].clientData.clientId + " set username to " + connections[i].clientData.username);
@@ -88,6 +92,7 @@ io.on('connection', function(client){
         
         connections[i].client.emit("REGISTERED" , {"clientId": connections[i].clientData.clientId,
         "vip": connections[i].clientData.isVip});
+    }
      });
 
      client.on('REGISTER_SCORE', function(score){
@@ -107,6 +112,7 @@ io.on('connection', function(client){
 
      client.on('EVERYBODY_READY', function(){
         selectConductor();
+        gameInProgress = true;
      });
 
      client.on('CONDUCTOR_READY', function(difficulty){
@@ -210,6 +216,7 @@ io.on('connection', function(client){
         {
             connections[i].client.emit("RESTART_GAME");
             console.log("GAME OVER FOOLS!");
+            gameInProgress = false;
         }
      });
   });
