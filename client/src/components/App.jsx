@@ -5,6 +5,9 @@ import "./styles.scss";
 import Score from "./Score";
 import ConductorSetup from "./ConductorSetup";
 import Instrument from "./Instrument";
+import Lobby from "./Lobby";
+import SelectTeam from "./SelectTeam";
+
 
 const App = () => {
     return (
@@ -15,6 +18,8 @@ const App = () => {
                     <Route path="/score/" exact component={Score}/>
                     <Route path="/conductorsetup/" exact component={ConductorSetup}/>
                     <Route path="/instrument/" exact component={Instrument}/>
+                    <Route path="/lobby/" exact component={Lobby}/>
+                    <Route path="/teams/" exact component={SelectTeam}/>
                 </div>
             </Router>
         </div>

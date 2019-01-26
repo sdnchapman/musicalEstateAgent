@@ -9,10 +9,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: teal;
   .button{
+    display: flex;
+    justify-content: center;
+    font-size: 22pt;
     cursor: pointer;
-    width: 100px;
-    color: red;
-    border: 1px solid red;
+    width: 50vh;
+    color: seashell;
+    background: gray;
+    border: 1px solid gray;
+    border-radius: 5px;
   }
+}
+
+.lobby-container{
+  display: flex;
+  height: 100vh;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: teal;
+  
 }
