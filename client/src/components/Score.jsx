@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
 import VIP from "./VIP";
+import ScoreBall from "./ScoreBall";
 
 export default class Score extends Component {
   constructor(props) {
@@ -41,9 +42,9 @@ export default class Score extends Component {
     const {playerScore, redScore, greenScore, blueScore} = response;
     this.setState({
       playerScore,
-      redScore: 123,
-      greenScore: 321,
-      blueScore: 888,
+      redScore,
+      greenScore,
+      blueScore,
       receivedScore:true,
     })
   }
@@ -59,25 +60,33 @@ export default class Score extends Component {
   }
 
   render() {
-    const
+    const { playerScore, redScore, greenScore, blueScore } = this.state;
+    let highestScore = redScore > greenScore ? redScore : greenScore;
+    highestScore = blueScore > highestScore ? blueScore : highestScore;
     return (
       <div>
-        <h3>Congrats! What an amazing performance!</h3>
+        <h2>Congrats! What an amazing performance!</h2>
         {
           this.state.receivedScore ? (
             <React.Fragment>
-              <h3>It isn't all about the individual ... but you did score:</h3>
-              <h2>{this.state.playerScore}</h2>
-              <h2>{this.state.redScore}</h2>
-              <h2>{this.state.greenScore}</h2>
-              <h2>{this.state.blueScore}</h2>
+              <h4>It isn't all about the individual ... but you did score:</h4>
+              <h2>{playerScore}</h2>
+              <h4>How did the teams do?</h4>
+              <div className='_flex _ms' style={{ 'justify-content': 'center' }}>
+                <ScoreBall className='red-ball' teamScore={redScore} highestScore={highestScore} />
+                <ScoreBall className='green-ball' teamScore={greenScore} highestScore={highestScore} />
+                <ScoreBall className='blue-ball' teamScore={blueScore} highestScore={highestScore} />
+              </div>
               {
-                window.isVip && (
+                window.isVip ? (
                   <div className="vip-container">
                     <VIP/>
                     <button onClick={this.restartGame}>Restart everyone's game</button>
                   </div>
                 )
+                  : (
+                    <span>Wait for the VIP to reset the game. Thanks for playing!</span>
+                  )
               }
             </React.Fragment>
           ) : <span>Loading Scores</span>
