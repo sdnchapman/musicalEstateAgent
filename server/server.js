@@ -88,12 +88,14 @@ io.on('connection', function(client){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username += score;
      });
+
+     client.on('REGISTER_TYPE', function(team){
+        var i = connections.findIndex((conClient)=>(conClient.client===team));
+        connections[i].clientData.type = team;
+     });
   });
 
-  client.on('REGISTER_TYPE', function(team){
-    var i = connections.findIndex((conClient)=>(conClient.client===client));
-    connections[i].clientData.type = team;
- });
+  
    
 
   const emitAll = (data) => {
