@@ -152,7 +152,16 @@ io.on('connection', function(client){
                     greenScore += connections[i].clientData.score;
                 }
             }
+           
         }
+
+        vipIndex = connections.findIndex((conClient)=>(conClient.clientData.isVip));
+        if(client === connections[vipIndex].client)
+        {
+            client.emit("NEW_VIP"{"vip": true});
+            console.log("End Game VIP selected");
+        }
+
         var playerIndex = connections.findIndex((conClient)=>(conClient.client===client));
 
         client.emit("FINAL_SCORE",{
@@ -163,9 +172,18 @@ io.on('connection', function(client){
             blueScore,
             redPercentage,
             bluePercentage,
-            greenPercentage});
+            greenPercentage            
+        });
 
         console.log("Final Scores Sent");
+     });
+
+     client.on('REQUEST_RESTART', function(){
+        for(var i = 0; i<connections.length; i++)
+        {
+            connections[i].client.emit("RESTART_GAME");
+            console.log("GAME OVER FOOLS!");
+        }
      });
   });
 
