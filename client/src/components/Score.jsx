@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
+import VIP from "./VIP";
 
 export default class Score extends Component {
   constructor(props) {
@@ -7,6 +8,9 @@ export default class Score extends Component {
 
     this.state = {
       playerScore: '',
+      redScore: '',
+      blueScore: '',
+      greenScore: '',
       receivedScores: false,
     };
 
@@ -34,9 +38,12 @@ export default class Score extends Component {
   }
 
   onReceiveScore(response) {
-    const {playerScore} = response;
+    const {playerScore, redScore, greenScore, blueScore} = response;
     this.setState({
       playerScore,
+      redScore: 123,
+      greenScore: 321,
+      blueScore: 888,
       receivedScore:true,
     })
   }
@@ -52,18 +59,22 @@ export default class Score extends Component {
   }
 
   render() {
+    const
     return (
       <div>
-        <h3>Congrats you finished!</h3>
+        <h3>Congrats! What an amazing performance!</h3>
         {
           this.state.receivedScore ? (
             <React.Fragment>
-              <h1>Score</h1>
+              <h3>It isn't all about the individual ... but you did score:</h3>
               <h2>{this.state.playerScore}</h2>
+              <h2>{this.state.redScore}</h2>
+              <h2>{this.state.greenScore}</h2>
+              <h2>{this.state.blueScore}</h2>
               {
                 window.isVip && (
                   <div className="vip-container">
-                    <p>You are the VIP</p>
+                    <VIP/>
                     <button onClick={this.restartGame}>Restart everyone's game</button>
                   </div>
                 )
