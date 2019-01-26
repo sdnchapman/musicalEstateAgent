@@ -40,8 +40,8 @@ export default class ConductorSetup extends Component {
     })
   }
 
-  onStartGame() {
-    socket.emit(state.CONDUCTOR_READY);
+  onStartGame(songid) {
+    socket.emit(state.CONDUCTOR_READY, songid);
   }
 
   render() {
@@ -114,7 +114,8 @@ export default class ConductorSetup extends Component {
           (screen === 8) && (
             <React.Fragment>
               <p>When you are ready to start playing, click the button below.</p>
-              <button onClick={this.onStartGame}>Begin the song!</button>
+              <button className="_ms" onClick={() => this.onStartGame(0)}>Begin the easy song!</button>
+              <button className="_ms" onClick={() => this.onStartGame(1)}>Begin the hard song!</button>
             </React.Fragment>
           )
         }
