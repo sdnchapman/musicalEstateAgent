@@ -20,7 +20,7 @@ export default class Instrument extends Component {
       gameStart: false,
       lockNote: false,
       startTime: false,
-      songId: false,
+      songId: 0,
       timeTillStart: 0,
       instrument: 1,
       notes: []

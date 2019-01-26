@@ -91,14 +91,18 @@ class ConductorView extends Component {
 
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
-    easy_bass.forEach((note, index) => {
-      if (easy_trumpets[index] === 1) {
+    const bassMusic = this.state.songId === 0 ? easy_bass : hard_bass;
+    const trumpetMusic = this.state.songId === 0 ? easy_trumpets : hard_trumpets;
+    const stringsMusic = this.state.songId === 0 ? easy_strings : hard_strings;
+
+    bassMusic.forEach((note, index) => {
+      if (trumpetMusic[index] === 1) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2))
       }
-      if(easy_strings[index]) {
+      if(stringsMusic[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0ffa0', canvas.height * 2))
       }
-      if(easy_bass[index]) {
+      if(bassMusic[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
@@ -114,9 +118,9 @@ class ConductorView extends Component {
         destroyNotes.push(index);
       }
     });
-    // for (let i = destroyNotes.length - 1; i >= 0; i--) {
-    //   this.gameObjects.splice(destroyNotes[i], 1);
-    // }
+    for (let i = destroyNotes.length - 1; i >= 0; i--) {
+      this.gameObjects.splice(destroyNotes[i], 1);
+    }
   }
 
   renderGame(canvas, ctx) {
