@@ -89,7 +89,7 @@ io.on('connection', function(client){
         "vip": connections[i].clientData.isVip});
      });
 
-     client.on('RECEIVE_SCORE', function(score){
+     client.on('REGISTER_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.score += score;
         console.log("ClientId " + connections[i].clientData.clientId + " scored " + score);
