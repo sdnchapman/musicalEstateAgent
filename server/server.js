@@ -74,14 +74,13 @@ io.on('connection', function(client){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username = username;
         console.log(username);
-
         if(connections.findIndex((conClient)=>(conClient.clientData.isVip)) === -1)
         {
             connections[0].clientData.isVip = true;
-            connections[0].client.emit("REGISTERED" , {"clientId": connections[0].clientData.clientId,
-            "vip": true});
         }
-
+        
+        connections[0].client.emit("REGISTERED" , {"clientId": connections[0].clientData.clientId,
+        "vip": connections[0].clientData.isVip});
      });
 
      client.on('RECEIVE_SCORE', function(score){
