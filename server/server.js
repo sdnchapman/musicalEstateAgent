@@ -99,10 +99,14 @@ io.on('connection', function(client){
      });
 
      client.on('GAME_START', function(){
-
+        var d = new Date(milliseconds);
+        var seconds = d.getSeconds() + 10;
+        d = d + seconds;
+        for(var i = 0; i<connections.length; i++)
+        {
+            connections[i].client.emit("STARTING_GAME", {"clientData":connections[i].clientData, "startTime":  d});
+        }
      });
-
-     
   });
 
   const selectConductor = () => {
