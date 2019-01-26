@@ -50,6 +50,7 @@ class ConductorView extends Component {
     this.noteSpeed = 0
 
     this.onSongEnd = this.onSongEnd.bind(this);
+    this.onGameOver = this.onGameOver.bind(this);
   }
 
   onSongEnd() {
@@ -57,15 +58,15 @@ class ConductorView extends Component {
   }
 
   componentWillMount() {
-    socket.on(state.FINAL_SCORE, this.onFinalScore);
+    socket.on(state.GAME_OVER, this.onGameOver);
   }
 
   componentWillUnmount() {
-    socket.removeListener(state.FINAL_SCORE, this.onFinalScore);
+    socket.removeListener(state.GAME_OVER, this.onGameOver);
   }
 
-  onFinalScore() {
-    this.props.history.push('/score?score=123');
+  onGameOver() {
+    this.props.history.push(`/score`);
   }
 
   initCanvas() {
