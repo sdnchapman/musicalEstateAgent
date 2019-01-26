@@ -21,6 +21,7 @@ export default class Instrument extends Component {
       lockNote: false,
       startTime: false,
       songId: false,
+      instrument: 1,
     };
     this.time = 0;
     this.lastTime = 0;
@@ -39,9 +40,30 @@ export default class Instrument extends Component {
     console.log('received componentWillMount', songId, startTime);
   }
 
+  selectInstrument() {
+    const {team} = this.state;
+    let instrument = null;
+    switch(team) {
+      case 'RED': // trumpets
+        instrument = 660
+        break;
+      case 'GREEN':  // strings
+        instrument = 517
+        break;
+      case 'BLUE':  // bass
+        instrument = 478
+        break;
+    }
+    return instrument;
+  }
+
   componentDidMount() {
+
+    const instrument = this.selectInstrument()
+    this.setState({instrument}) 
+    console.log(instrument)
     this.lastTime = performance.now()
-    this.midiSounds.cacheInstrument(660);
+    this.midiSounds.cacheInstrument(instrument);
 
     let newTime = performance.now();
     const newDelta = (newTime - this.lastTime) / 1000;
@@ -51,12 +73,13 @@ export default class Instrument extends Component {
   }
 
   onClick() {
+    const{instrument} = this.state;
     let score = 0;
     if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5 && !this.state.lockNote) {
       score = Math.floor(100 - (200 * Math.abs(this.notes[0][0] - this.time)));
       this.setState({lockNote: true});
       let frequency = score >= 75 ? this.notes[0][1] : Math.floor((Math.random() * 20) + 50);
-      this.midiSounds.playChordNow(660, [frequency], 1);
+      this.midiSounds.playChordNow(instrument, [frequency], 1);
     } else {
       score = 0;
     }
@@ -77,6 +100,9 @@ export default class Instrument extends Component {
 
     if (this.state.gameStart) {
       if (this.notes.length > 0 && this.time >= this.notes[0][0] + 0.5) {
+        if(this.state.lockNote === false){
+          socket.emit(state.REGISTER_SCORE, 0);
+        }
         this.notes.splice(0, 1);
         this.setState({lockNote: false});
       }
