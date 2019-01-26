@@ -59,9 +59,9 @@ io.on('connection', function(client){
                 if(connections[vipIndex].clientData.username !== "")
                 {
                     vipFound = true;
-                    connections[0].clientData.isVip = true;
-                    connections[0].client.emit("NEW_VIP" , {"clientId": connections[0].clientData.clientId,
-                    "vip": true});
+                    connections[vipIndex].clientData.isVip = true;
+                    connections[vipIndex].client.emit("NEW_VIP" , {"clientId": connections[vipIndex].clientData.clientId,
+                    "vip": connections[vipIndex].clientData.isVip});
                 }
                 else{
                     vipIndex++;
@@ -88,11 +88,39 @@ io.on('connection', function(client){
         connections[i].clientData.username += score;
      });
 
-     client.on('REGISTER_TYPE', function(team){
-        var i = connections.findIndex((conClient)=>(conClient.client===team));
-        connections[i].clientData.type = team;
+     client.on('SELECT_TEAM', function(data){
+        var i = connections.findIndex((conClient)=>(conClient.clientData.clientId===data.clientId));
+        connections[i].clientData.type = data.team;
+        connections[i].client.emit("TEAM_SELECTED", connections[i].clientData.type);
      });
+
+     client.on('EVERYBODY_READY', function(){
+        selectConductor();
+     });
+
+     client.on('GAME_START', function(){
+
+     });
+
+     
   });
+
+  const selectConductor = () => {
+    conductorSelect = Math.floor(Math.random() * connections.length);  
+    for(var i = 0; i<connections.length; i++)
+    {
+        if(i===conductorSelect)
+        {
+            connections[i].clientData.type = "CONDUCTOR";
+            connections[i].client.emit("CONDUCTOR_SETUP");
+        }
+        else
+        {
+            connections[i].clientData.type = "MUSICIAN";
+            connections[i].client.emit("MUSICIAN_SETUP");
+        }
+    }
+  }
 
   
    
