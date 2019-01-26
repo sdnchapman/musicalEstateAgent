@@ -30,22 +30,25 @@ io.on('connection', function(client){
         
     client.emit("clientInfo" , {"clientId": idCounter,
                                 "vip": isVip});
+    console.log('User ' + idCounter + ' is connected');
     idCounter++;
-    console.log('a user connected');
+   
     
     emitAll(connections.length);
     
     client.on('disconnect', function() {
         
-        console.log('Got disconnect!');
+        
   
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         console.log(i);
         var disconnectId = connections[i].clientData.clientId;
+        console.log('userId ' + disconnectId +' Got disconnected!');
         var newVip = false;
         if(connections[i].clientData.isVip)
         {
             newVip = true;
+            console.log('New VIP required');
         }
         connections.splice(i, 1);
         emitAll("Client " +  disconnectId + " disconnected" ); 
@@ -62,6 +65,7 @@ io.on('connection', function(client){
                     connections[vipIndex].clientData.isVip = true;
                     connections[vipIndex].client.emit("NEW_VIP" , {"clientId": connections[vipIndex].clientData.clientId,
                     "vip": connections[vipIndex].clientData.isVip});
+                    console.log('New VIP Chosen: ClientId ' + connections[vipIndex].clientData.clientId);
                 }
                 else{
                     vipIndex++;
@@ -73,19 +77,22 @@ io.on('connection', function(client){
      client.on('REGISTER_USERNAME', function(username){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username = username;
-        console.log(username);
+        console.log("ClientId " + connections[i].clientData.clientId + " set username to " + connections[i].clientData.username);
         if(connections.findIndex((conClient)=>(conClient.clientData.isVip)) === -1)
         {
             connections[i].clientData.isVip = true;
+            console.log("ClientId " + connections[i].clientData.clientId + " set as VIP");
+        
         }
         
         connections[i].client.emit("REGISTERED" , {"clientId": connections[i].clientData.clientId,
         "vip": connections[i].clientData.isVip});
      });
 
-     client.on('RECEIVE_SCORE', function(score){
+     client.on('REGISTER_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.score += score;
+        console.log("ClientId " + connections[i].clientData.clientId + " scored " + score);
 
      });
 
@@ -93,6 +100,7 @@ io.on('connection', function(client){
         var i = connections.findIndex((conClient)=>(conClient.clientData.clientId===data.clientId));
         connections[i].clientData.type = data.team;
         connections[i].client.emit("TEAM_SELECTED", connections[i].clientData.type);
+        console.log("ClientId " + connections[i].clientData.clientId + " joined " + connections[i].clientData.type + "team");
      });
 
      client.on('EVERYBODY_READY', function(){
@@ -107,6 +115,75 @@ io.on('connection', function(client){
         {
             connections[i].client.emit("GAME_START", {"clientData":connections[i].clientData, "startTime":  d});
         }
+        console.log("Conductor set game to start at: " + d);
+     });
+
+     client.on('CONDUCTOR_SONG_FINISHED', function(){
+        for(var i = 0; i<connections.length; i++)
+        {
+            connections[i].client.emit("GAME_OVER");
+            console.log("GAME OVER");
+        }
+     });
+
+     client.on('REQUEST_SCORE', function(){
+        var redScore = 0;
+        var greenScore = 0;
+        var blueScore = 0;
+
+        var redPercentage = 50;
+        var greenPercentage = 60;
+        var bluePercentage = 70;
+
+        for(var i = 0; i<connections.length; i++)
+        {
+            if(connections[i].clientData.type !== "CONDUCTOR")
+            {
+                if(connections[i].clientData.type === "RED")
+                {
+                    redScore += connections[i].clientData.score;
+                }
+                if(connections[i].clientData.type === "BLUE")
+                {
+                    blueScore += connections[i].clientData.score;
+                }
+                if(connections[i].clientData.type === "GREEN")
+                {
+                    greenScore += connections[i].clientData.score;
+                }
+            }
+           
+        }
+
+        vipIndex = connections.findIndex((conClient)=>(conClient.clientData.isVip));
+        if(client === connections[vipIndex].client)
+        {
+            client.emit("NEW_VIP", {"vip": true});
+            console.log("End Game VIP selected");
+        }
+
+        var playerIndex = connections.findIndex((conClient)=>(conClient.client===client));
+
+        client.emit("FINAL_SCORE",{
+            "playerScore": connections[playerIndex].clientData.score,
+            "playerPercentage":85,
+            redScore,
+            greenScore,
+            blueScore,
+            redPercentage,
+            bluePercentage,
+            greenPercentage            
+        });
+
+        console.log("Final Scores Sent");
+     });
+
+     client.on('REQUEST_RESTART', function(){
+        for(var i = 0; i<connections.length; i++)
+        {
+            connections[i].client.emit("RESTART_GAME");
+            console.log("GAME OVER FOOLS!");
+        }
      });
   });
 
@@ -118,11 +195,15 @@ io.on('connection', function(client){
         {
             connections[i].clientData.type = "CONDUCTOR";
             connections[i].client.emit("CONDUCTOR_SETUP");
+            console.log("ClientId " + connections[i].clientData.clientId + " set as conductor");
+    
+            
         }
         else
         {
             connections[i].clientData.type = "MUSICIAN";
             connections[i].client.emit("MUSICIAN_SETUP");
+            console.log("ClientId " + connections[i].clientData.clientId + " set as musician");
         }
     }
   }

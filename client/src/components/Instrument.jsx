@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import MIDISounds from 'midi-sounds-react';
+import { state } from "../../../common/gameConstants";
 
 const song = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
 
@@ -20,6 +21,7 @@ export default class Instrument extends Component {
     };
     this.time = 0;
     this.lastTime = 0;
+    this.onScored = this.onScored.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +43,7 @@ export default class Instrument extends Component {
     } else {
       score = 0;
     }
+    socket.emit(state.REGISTER_SCORE, points);
     let frequency = score >= 75 ? this.notes[0][1] : (Math.random() * 20) + 50;
     this.midiSounds.playChordNow(660, [frequency], 1);
   }
@@ -82,5 +85,4 @@ export default class Instrument extends Component {
       </Fragment>
     );
   }
-
 }

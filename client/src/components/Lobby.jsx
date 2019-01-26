@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {state} from "../../../common/gameConstants";
+import VIP from "./VIP";
 
 export default class Lobby extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ export default class Lobby extends Component {
         {
           window.isVip ? (
             <div className="vip-container">
-              <p>You are a VIP</p>
+              <VIP/>
               <button onClick={this.onEverybodyReady}>Everybody Ready</button>
             </div>
           )

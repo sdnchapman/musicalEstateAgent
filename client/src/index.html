@@ -14,6 +14,9 @@
 <script>
   var socket = io({transports: ['websocket'], upgrade: false});
   console.log('Opened up a socket connection');
+  socket.on('RESTART_GAME', () => {
+    window.location = "/";
+  })
 </script>
 <body style="margin: 0; background-color:teal">
   <div id="root"></div>
