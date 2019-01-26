@@ -34,10 +34,6 @@ io.on('connection', function(client){
     console.log('a user connected');
     
     emitAll(connections.length);
-   /* for(var i = 0; i<connections.length; i++)
-    {
-      connections[i].client.emit("hello", connections.length);
-    }*/
     
     client.on('disconnect', function() {
         
@@ -61,7 +57,15 @@ io.on('connection', function(client){
         }
      });
 
-      
+     client.on('receiveUsername', function(username){
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        connections[i].clientData.username = username;
+     });
+
+     client.on('receiveScore', function(score){
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        connections[i].clientData.username += score;
+     });
   });  
 
   const emitAll = (data) => {
@@ -70,9 +74,6 @@ io.on('connection', function(client){
           connections[i].client.emit("data", data);
       }
   }
-
-  
-
 
 server.listen(8080);
 console.log('Server is alive');
