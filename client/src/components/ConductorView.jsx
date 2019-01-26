@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { timingSafeEqual } from 'crypto';
-let time = 0;
-let lastTime = performance.now();
+
 const noteTravelTime = 2;
-let distanceToBar;
-let noteSpeed;
 const laneWidth = 10;
 const colors = ['red', 'green', 'blue'];
 const redNodes = [
@@ -29,16 +25,13 @@ class Note {
     this.length = length;
   }
 
-  update() {
+  update(noteSpeed) {
     this.y += noteSpeed;
     if (this.y > this.screenHeight) {
       this.isOffScreen = true;
     }
   }
 }
-
-let gameObjects = [];
-
 
 class ConductorView extends Component {
   constructor(props) {
@@ -47,25 +40,30 @@ class ConductorView extends Component {
     this.state = {
       gameStart: false,
       startCountDown: 3,
+      shouldUpdate: true,
     };
+    this.gameObjects = [];
+    this.time = 0;
+    this.lastTime = 0;
+    this.distanceToBar = 0;
+    this.noteSpeed = 0
   }
 
   initCanvas() {
     const canvas = this.canvasRef.current;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
     const ctx = canvas.getContext("2d");
 
-
     let newTime = performance.now();
-    const newDelta = (newTime - lastTime) / 1000;
-    lastTime = newTime;
+    const newDelta = (newTime - this.lastTime) / 1000;
+    this.lastTime = newTime;
 
-    distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
+    this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
     redNodes.forEach(([note, length], index) => {
       if (note === 1) {
-        gameObjects.push(new Note(0, (distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2, length))
+        this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2, length))
       }
     });
 
@@ -79,16 +77,16 @@ class ConductorView extends Component {
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
   }
 
-  update(deltaTime) {
+  update(noteSpeed) {
     let destroyNotes = [];
-    gameObjects.forEach((obj, index) => {
-      obj.update(deltaTime);
+    this.gameObjects.forEach((obj, index) => {
+      obj.update(noteSpeed);
       if (obj.isOffScreen) {
         destroyNotes.push(index);
       }
     });
     for (let i = destroyNotes.length - 1; i >= 0; i--) {
-      gameObjects.splice(destroyNotes[i], 1);
+      this.gameObjects.splice(destroyNotes[i], 1);
     }
   }
 
@@ -113,7 +111,7 @@ class ConductorView extends Component {
     );
 
     // notes
-    gameObjects.forEach(obj => {
+    this.gameObjects.forEach(obj => {
       ctx.fillStyle = obj.color;
       let xPos = (canvas.width / 4);
       switch (obj.color) {
@@ -130,13 +128,13 @@ class ConductorView extends Component {
       // note
       ctx.fillRect(xPos - obj.width / 2, obj.y, obj.width, obj.height);
       //note length
-      ctx.fillRect(xPos - obj.width / 6, obj.y - (distanceToBar / 2) * obj.length, obj.width / 3, (distanceToBar / 2) * obj.length);
+      ctx.fillRect(xPos - obj.width / 6, obj.y - (this.distanceToBar / 2) * obj.length, obj.width / 3, (this.distanceToBar / 2) * obj.length);
     });
 
     if (!this.state.gameStart) {
       ctx.fillStyle = 'black';
       ctx.font = "240px Arial";
-      let countDown = Math.ceil(3 - time);
+      let countDown = Math.ceil(3 - this.time);
       if (countDown <= -1) { this.setState({ gameStart: true }) }
       ctx.fillText(countDown <= 0 ? '🏁' : countDown, canvas.width / 2 - 70, canvas.height / 2);
     }
@@ -144,29 +142,30 @@ class ConductorView extends Component {
 
   animationFrame(canvas, ctx, deltaTime) {
     let newTime = performance.now();
-    time += deltaTime;
+    this.time += deltaTime;
 
-    noteSpeed = distanceToBar / (noteTravelTime / deltaTime);
+    this.noteSpeed = this.distanceToBar / (noteTravelTime / deltaTime);
 
     if (this.state.gameStart) {
-      this.update(deltaTime);
+      this.update(this.noteSpeed);
     }
 
     this.renderGame(canvas, ctx);
 
-    const newDelta = (newTime - lastTime) / 1000;
-    lastTime = newTime;
-    window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta));
+    const newDelta = (newTime - this.lastTime) / 1000;
+    this.lastTime = newTime;
 
+    window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta));
   }
 
   componentDidMount() {
+    this.lastTime = performance.now()
     this.initCanvas();
   }
 
   render() {
     return (
-      <div>
+      <div style={{ height: '80vh' }}>
         <canvas id="canvas" ref={this.canvasRef} />
       </div>
     );
