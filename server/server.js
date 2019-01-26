@@ -172,7 +172,28 @@ io.on('connection', function(client){
         }
 
         vipIndex = connections.findIndex((conClient)=>(conClient.clientData.isVip));
-        if(client === connections[vipIndex].client)
+        if(vipIndex === -1)
+        {
+            if(connections.length >= 1)
+            {
+            var vipIn = 0;
+            var vipFound = false;
+            while(!vipFound)
+            {
+                if(connections[vipIn].clientData.username !== "")
+                {
+                    vipFound = true;
+                    connections[vipIn].clientData.isVip = true;
+                    client.emit("NEW_VIP", {"vip": true});
+                    console.log('New VIP Chosen: ClientId ' + connections[vipIn].clientData.clientId);
+                }
+                else{
+                    vipIn++;
+                }
+            }          
+        }
+        }
+        else if(client === connections[vipIndex].client)
         {
             client.emit("NEW_VIP", {"vip": true});
             console.log("End Game VIP selected");
