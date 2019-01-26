@@ -10,13 +10,11 @@ class SelectTeam extends Component {
   }
 
   componentWillMount() {
-    socket.on(state.SELECT_TEAM, this.onSelectTeam);
     socket.on(state.TEAM_SELECTED, this.setTeam);
     socket.on(state.GAME_START, this.onGameStart);
   }
 
   componentWillUnmount() {
-    socket.removeListener(state.SELECT_TEAM, this.onSelectTeam);
     socket.removeListener(state.TEAM_SELECTED, this.setTeam);
     socket.removeListener(state.GAME_START, this.onGameStart);
   }
