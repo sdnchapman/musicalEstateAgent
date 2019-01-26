@@ -31,13 +31,13 @@ export default class Lobby extends Component {
   onMusicianSetup(response) {
     const { vip } = response;
     window.isVip = vip;
-    this.context.router.history.push('/teams');
+    this.props.history.push('/teams');
   }
 
   onConductorSetup(response) {
     const { vip } = response;
     window.isVip = vip;
-    this.context.router.history.push('/conductorsetup');
+    this.props.history.push('/conductorsetup');
   }
 
   render() {
