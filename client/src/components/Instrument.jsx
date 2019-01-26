@@ -90,8 +90,8 @@ export default class Instrument extends Component {
     if (notes.length > 0 && this.time >= notes[0][0] - 1) {
       score = 100 - (notes[0][0] - this.time) * 100;
       notes.splice(0, 1);
-      let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
-      this.midiSounds.playChordNow(instrument, [frequency], 1);
+      // let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
+      this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
     } else {
       score = 0;
     }
@@ -138,17 +138,22 @@ export default class Instrument extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
-        <div>
-          <button onClick={() => this.onClick()}>Make the sound!</button>
+      <React.Fragment>
+        <div className="container mt-4 p-4 bg-primary">
+          <h4>Only thing better than a beautiful instrument, is a golf club. ⛳</h4>
         </div>
-        {this.state.timeTillStart >= 0 && (
-          <h1>
-            {Math.floor(this.state.timeTillStart)}
-          </h1>
-        )}
-      </Fragment>
+        <div className="container mb-4 p-4 bg-white">
+          <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
+          <div>
+            <button className="btn btn-dark text-light" onClick={() => this.onClick()}>Make the sound!</button>
+          </div>
+          {this.state.timeTillStart >= 0 && (
+            <h1>
+              {Math.floor(this.state.timeTillStart)}
+            </h1>
+          )}
+        </div>
+      </React.Fragment>
     );
   }
 }

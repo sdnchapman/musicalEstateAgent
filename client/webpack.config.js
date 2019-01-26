@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '../server/static/'),
+    path: path.resolve(__dirname, '../server/clientBuild/'),
     filename: 'bundle.js'
   },
   plugins: [htmlWebpackPlugin],

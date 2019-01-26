@@ -45,7 +45,7 @@ export default class Score extends Component {
       redScore,
       greenScore,
       blueScore,
-      receivedScore:true,
+      receivedScore: true,
     })
   }
 
@@ -54,44 +54,52 @@ export default class Score extends Component {
   }
 
   changeVip(response) {
-    const { vip } = response;
+    const {vip} = response;
     window.isVip = vip;
     this.forceUpdate()
   }
 
   render() {
-    const { playerScore, redScore, greenScore, blueScore } = this.state;
+    const {playerScore, redScore, greenScore, blueScore} = this.state;
     let highestScore = redScore > greenScore ? redScore : greenScore;
     highestScore = blueScore > highestScore ? blueScore : highestScore;
     return (
-      <div>
-        <h2>Congrats! What an amazing performance!</h2>
-        {
-          this.state.receivedScore ? (
-            <React.Fragment>
-              <h4>It isn't all about the individual ... but you did score:</h4>
-              <h2>{playerScore}</h2>
-              <h4>How did the teams do?</h4>
-              <div className='_flex _ms' style={{ 'justify-content': 'center' }}>
-                <ScoreBall className='red-ball' teamScore={redScore} highestScore={highestScore} />
-                <ScoreBall className='green-ball' teamScore={greenScore} highestScore={highestScore} />
-                <ScoreBall className='blue-ball' teamScore={blueScore} highestScore={highestScore} />
-              </div>
-              {
-                window.isVip ? (
-                  <div className="vip-container">
-                    <VIP/>
-                    <button onClick={this.restartGame}>Restart everyone's game</button>
-                  </div>
-                )
-                  : (
-                    <span>Wait for the VIP to reset the game. Thanks for playing!</span>
-                  )
-              }
-            </React.Fragment>
-          ) : <span>Loading Scores</span>
-        }
-      </div>
+      <React.Fragment>
+        <div className="container mt-4 mb-4 p-4 bg-warning">
+          <h2>Congrats! What an amazing performance!</h2>
+        </div>
+        <div className="container mt-4 mb-4 p-4 bg-dark text-light">
+          <h4>It isn't all about the individual ... but you did score:</h4>
+          <p>{playerScore + ' points'}</p>
+        </div>
+        <div className="container mt-4 mb-4 p-4 bg-white">
+          {
+            this.state.receivedScore ? (
+              <React.Fragment>
+                <h4>How did the teams do?</h4>
+                <div className='_flex _ms' style={{'justify-content': 'center'}}>
+                  <ScoreBall className='red-ball' teamScore={redScore} highestScore={highestScore}/>
+                  <ScoreBall className='green-ball' teamScore={greenScore} highestScore={highestScore}/>
+                  <ScoreBall className='blue-ball' teamScore={blueScore} highestScore={highestScore}/>
+                </div>
+              </React.Fragment>
+            ) : <span>Loading Scores</span>
+          }
+        </div>
+        <div className="container mt-4 mb-4 p-4 d-flex bg-white">
+          {
+            window.isVip ? (
+                <React.Fragment>
+                  <VIP/>
+                  <button className="btn btn-primary" onClick={this.restartGame}> Restart everyone's game</button>
+                </React.Fragment>
+              )
+              : (
+                <span>Wait for the VIP to reset the game. Thanks for playing!</span>
+              )
+          }
+        </div>
+      </React.Fragment>
     );
   }
 }

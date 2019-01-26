@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
 
 class SelectTeam extends Component {
@@ -26,50 +26,54 @@ class SelectTeam extends Component {
     socket.removeListener(state.GAME_START, this.onGameStart);
   }
 
-  onGameStart(response){
-    const { startTime, songId, clientData:{type} } = response;
+  onGameStart(response) {
+    const {startTime, songId, clientData:{type} } = response;
     console.log(response)
     this.props.history.push(`/instrument?songId=${songId}&startTime=${startTime}&team=${type}`);
   }
 
-  setTeam(team){
+  setTeam(team) {
     window.team = team;
     this.forceUpdate();
   }
 
   onSelectTeam(team) {
     let payload = {clientId: window.clientId, team};
-    window.socket.emit(state.SELECT_TEAM, payload );
+    window.socket.emit(state.SELECT_TEAM, payload);
   }
 
   render() {
     const {team} = window;
-    return(
-      <div>
-        {team === undefined ? <h2>Select Your Team!</h2>: 
-          <div>
-            <h1>You are in the {team} team!</h1>
-            <h3>Soon you will be given your instrument</h3>
-            <h3>Pay attention to the conductor</h3>
-            <h4>When the conductor points at you play it by pressing the button</h4>
-            <br/>
-            <h4>Change Team</h4>
+    return (
+      <React.Fragment>
+          <div className="container mt-4 mb-4 p-4 bg-white">
+          {team === undefined ? <h2>Select Your Team!</h2> :
+            <div>
+              <h3>You are in the {team} team!</h3>
+              <p>Soon you will be given your instrument</p>
+              <p>Pay attention to the conductor</p>
+              <p>When the conductor points at you play it by pressing the button</p>
+              <br/>
+              <h4>Change Team</h4>
+            </div>
+          }
+          <div className="btn-group" role="group" aria-label="Basic example">
+            <button value="red" type="button" className="btn btn-danger" onClick={() => this.onSelectTeam('RED')}>Red
+            </button>
+            <button value="green" type="button" className="btn btn-success"
+                    onClick={() => this.onSelectTeam('GREEN')}>Green
+            </button>
+            <button value="blue" type="button" className="btn btn-primary"
+                    onClick={() => this.onSelectTeam('BLUE')}>Blue
+            </button>
           </div>
-        }
-        <TeamButton name="red" onSelectTeam={this.onSelectTeam} />
-        <TeamButton name="green" onSelectTeam={this.onSelectTeam}/>
-        <TeamButton name="blue" onSelectTeam={this.onSelectTeam}/>
-      </div>
-      
-
+        </div>
+        <div className="container mt-4 mb-4 p-4 bg-dark text-light">
+          <p><span class="font-italic font-weight-bold">Remember! Team building activities are not just essential, they are fun</span> 👍</p>
+        </div>
+      </React.Fragment>
     )
   }
 }
 
-
-const TeamButton = ({name, onSelectTeam}) =>{
-  return(
-    <button value={name} onClick={() => onSelectTeam(name.toUpperCase())}>{name}</button>
-  )
-}
 export default SelectTeam;
