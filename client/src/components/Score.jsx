@@ -12,6 +12,7 @@ export default class Score extends Component {
 
     this.onReceiveScore = this.onReceiveScore.bind(this);
     this.requestScore = this.requestScore.bind(this);
+    this.changeVip = this.changeVip.bind(this);
   }
 
   componentDidMount() {
@@ -24,10 +25,12 @@ export default class Score extends Component {
 
   componentWillMount() {
     socket.on(state.FINAL_SCORE, this.onReceiveScore);
+    socket.on(state.NEW_VIP, this.changeVip);
   }
 
   componentWillUnmount() {
     socket.removeListener(state.FINAL_SCORE, this.onReceiveScore);
+    socket.removeListener(state.NEW_VIP, this.changeVip);
   }
 
   onReceiveScore(response) {
@@ -36,6 +39,16 @@ export default class Score extends Component {
       playerScore,
       receivedScore:true,
     })
+  }
+
+  restartGame() {
+    socket.emit(state.REQUEST_RESTART);
+  }
+
+  changeVip(response) {
+    const { vip } = response;
+    window.isVip = vip;
+    this.forceUpdate()
   }
 
   render() {
@@ -47,6 +60,14 @@ export default class Score extends Component {
             <React.Fragment>
               <h1>Score</h1>
               <h2>{this.state.playerScore}</h2>
+              {
+                window.isVip && (
+                  <div className="vip-container">
+                    <p>You are the VIP</p>
+                    <button onClick={this.restartGame}>Restart everyone's game</button>
+                  </div>
+                )
+              }
             </React.Fragment>
           ) : <span>Loading Scores</span>
         }
