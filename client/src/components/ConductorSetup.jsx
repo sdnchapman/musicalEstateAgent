@@ -22,8 +22,9 @@ export default class ConductorSetup extends Component {
     socket.removeListener(state.GAME_START, this.onGameStart);
   }
 
-  onGameStart() {
-    this.props.history.push('/conductor/');
+  onGameStart(response) {
+    const { startTime, songId } = response;
+    this.props.history.push(`/conductor?songId=${songId}&startTime=${startTime}`);
   }
 
   onNextScreen() {

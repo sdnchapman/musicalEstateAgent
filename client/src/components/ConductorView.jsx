@@ -42,12 +42,14 @@ class ConductorView extends Component {
       gameStart: false,
       startCountDown: 3,
       shouldUpdate: true,
+      songId: null,
+      startTime: null,
     };
     this.gameObjects = [];
     this.time = 0;
     this.lastTime = 0;
     this.distanceToBar = 0;
-    this.noteSpeed = 0
+    this.noteSpeed = 0;
 
     this.onSongEnd = this.onSongEnd.bind(this);
     this.onGameOver = this.onGameOver.bind(this);
@@ -58,6 +60,14 @@ class ConductorView extends Component {
   }
 
   componentWillMount() {
+    const params = new URLSearchParams(this.props.location.search);
+    const songId = params.get('songId');
+    const startTime = params.get('startTime');
+    this.setState({
+      songId,
+      startTime,
+    });
+    console.log('query params', songId, startTime);
     socket.on(state.GAME_OVER, this.onGameOver);
   }
 
