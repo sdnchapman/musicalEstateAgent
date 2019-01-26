@@ -10,8 +10,27 @@ app.get('/', function(req, res,next) {
 
 const connections = []
 
+var idCounter = 1;
+
 io.on('connection', function(client){
-    connections.push({ client,"clientId" : connections.length+1 } );
+    var isVip = false;
+    if(connections.length===0){
+        isVip = true;
+    }
+    else{
+        isVip = false;
+    }
+    connections.push({"clientData": {
+                    "type" : "test",
+                    "clientId": idCounter,
+                    "username": "bob"+idCounter,
+                    "score" : 0,
+                    isVip},
+                    client})
+        
+    client.emit("clientInfo" , {"clientId": idCounter,
+                                "vip": isVip});
+    idCounter++;
     console.log('a user connected');
     
     emitAll(connections.length);
@@ -26,9 +45,20 @@ io.on('connection', function(client){
   
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         console.log(i);
-        var disconnectId = connections[i].clientId;
+        var disconnectId = connections[i].clientData.clientId;
+        var newVip = false;
+        if(connections[i].clientData.isVip)
+        {
+            newVip = true;
+        }
         connections.splice(i, 1);
         emitAll("Client " +  disconnectId + " disconnected" ); 
+        if(newVip)
+        {
+            connections[0].clientData.isVip = true;
+            connections[0].client.emit("clientInfo" , {"clientId": connections[0].clientData.clientId,
+            "vip": true});
+        }
      });
 
       
