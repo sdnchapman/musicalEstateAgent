@@ -132,7 +132,7 @@ io.on('connection', function(client){
         for(var i = 0; i<connections.length; i++)
         {
             connections[i].client.emit("GAME_OVER");
-            console.log("GAME OVER");
+            //console.log("GAME OVER");
         }
      });
 
