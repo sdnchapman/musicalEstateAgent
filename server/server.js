@@ -56,7 +56,7 @@ io.on('connection', function(client){
         {
             var vipIndex = 0;
             var vipFound = false;
-            while(!vipFound)
+            while(!vipFound && vipIndex < connections.length)
             {
                 if(connections[vipIndex].clientData.username !== "")
                 {
@@ -69,6 +69,9 @@ io.on('connection', function(client){
                 else{
                     vipIndex++;
                 }
+            }
+            if(!vipFound){
+                gameInProgress = false;
             }          
         }
         if(connections.length === 0)
@@ -178,7 +181,7 @@ io.on('connection', function(client){
             {
             var vipIn = 0;
             var vipFound = false;
-            while(!vipFound)
+            while(!vipFound && vipIn < connections.length)
             {
                 if(connections[vipIn].clientData.username !== "")
                 {
@@ -187,10 +190,14 @@ io.on('connection', function(client){
                     client.emit("NEW_VIP", {"vip": true});
                     console.log('New VIP Chosen: ClientId ' + connections[vipIn].clientData.clientId);
                 }
-                else{
+                
                     vipIn++;
-                }
-            }          
+                
+            }  
+            if(!vipFound)
+            {
+                gameInProgress = false;
+            }        
         }
         }
         else if(client === connections[vipIndex].client)
