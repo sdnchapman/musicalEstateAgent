@@ -8,6 +8,7 @@ export default class Lobby extends Component {
     this.changeVip = this.changeVip.bind(this);
     this.onConductorSetup = this.onConductorSetup.bind(this);
     this.onMusicianSetup = this.onMusicianSetup.bind(this);
+    this.onEverybodyReady = this.onEverybodyReady.bind(this);
   }
 
   componentWillMount() {
@@ -28,33 +29,42 @@ export default class Lobby extends Component {
     this.forceUpdate()
   }
 
-  onMusicianSetup(response) {
-    const { vip } = response;
-    window.isVip = vip;
-    this.props.history.push('/teams');
+  onMusicianSetup() {
+    this.props.history.push('/teams/');
   }
 
-  onConductorSetup(response) {
-    const { vip } = response;
-    window.isVip = vip;
-    this.props.history.push('/conductorsetup');
+  onConductorSetup() {
+    this.props.history.push('/conductorsetup/');
+  }
+
+  onEverybodyReady () {
+    console.log('Sending Everybody In');
+    window.socket.emit(state.EVERYBODY_READY);
   }
 
   render() {
     return (
       <div className="lobby-container">
         <h1>Lobby</h1>
-        {window.isVip ? <Vip/> : <Client/>}
+        {
+          window.isVip ? (
+            <div className="vip-container">
+              <p>You are a VIP</p>
+              <button onClick={this.onEverybodyReady}>Everybody Ready</button>
+            </div>
+          )
+          : <Client/>
+        }
       </div>
     );
   }
 };
 
-const Vip = () =>{
+const Vip = (onClick) =>{
   return(
     <div className="vip-container">
       You are a VIP
-      <Button content="Start"/>
+
     </div>
   )
 }
