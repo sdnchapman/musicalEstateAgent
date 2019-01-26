@@ -61,7 +61,7 @@ io.on('connection', function(client){
                     vipFound = true;
                     connections[vipIndex].clientData.isVip = true;
                     connections[vipIndex].client.emit("NEW_VIP" , {"clientId": connections[vipIndex].clientData.clientId,
-                    "vip": tconnections[vipIndex].clientData.isVip});
+                    "vip": connections[vipIndex].clientData.isVip});
                 }
                 else{
                     vipIndex++;
