@@ -93,7 +93,7 @@ io.on('connection', function(client){
         connections[i].clientData.type = team;
      });
 
-     client.on('EVERYONE_READY', function(){
+     client.on('EVERYBODY_READY', function(){
         selectConductor();
      });
   });
