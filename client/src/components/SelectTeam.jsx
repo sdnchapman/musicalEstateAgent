@@ -6,16 +6,23 @@ class SelectTeam extends Component {
     super(props)
     this.setTeam = this.setTeam.bind(this);
     this.onSelectTeam = this.onSelectTeam.bind(this);
+    this.onGameStart = this.onGameStart.bind(this);
   }
 
   componentWillMount() {
     socket.on(state.SELECT_TEAM, this.onSelectTeam);
     socket.on(state.TEAM_SELECTED, this.setTeam);
+    socket.on(state.GAME_START, this.onGameStart);
   }
 
   componentWillUnmount() {
     socket.removeListener(state.SELECT_TEAM, this.onSelectTeam);
     socket.removeListener(state.TEAM_SELECTED, this.setTeam);
+    socket.removeListener(state.GAME_START, this.onGameStart);
+  }
+
+  onGameStart(responce){
+    this.props.history.push('/instrument/');
   }
 
   setTeam(team){
