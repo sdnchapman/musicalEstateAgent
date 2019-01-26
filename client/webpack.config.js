@@ -7,9 +7,11 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
 });
 
 module.exports = {
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, '../server/static/'),
     filename: 'bundle.js'
   },
   plugins: [htmlWebpackPlugin],
