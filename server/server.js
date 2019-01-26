@@ -59,9 +59,9 @@ io.on('connection', function(client){
                 if(connections[vipIndex].clientData.username !== "")
                 {
                     vipFound = true;
-                    connections[0].clientData.isVip = true;
-                    connections[0].client.emit("NEW_VIP" , {"clientId": connections[0].clientData.clientId,
-                    "vip": true});
+                    connections[vipIndex].clientData.isVip = true;
+                    connections[vipIndex].client.emit("NEW_VIP" , {"clientId": connections[vipIndex].clientData.clientId,
+                    "vip": tconnections[vipIndex].clientData.isVip});
                 }
                 else{
                     vipIndex++;
