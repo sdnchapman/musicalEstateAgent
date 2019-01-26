@@ -38,7 +38,6 @@ class ConductorView extends Component {
     this.canvasRef = React.createRef();
     this.state = {
       gameStart: false,
-      startCountDown: 3,
       shouldUpdate: true,
       songId: null,
       startTime: null,
@@ -51,6 +50,8 @@ class ConductorView extends Component {
 
     this.onSongEnd = this.onSongEnd.bind(this);
     this.onGameOver = this.onGameOver.bind(this);
+
+    this.countdown = 0;
   }
 
   onSongEnd() {
@@ -63,9 +64,8 @@ class ConductorView extends Component {
     const startTime = params.get('startTime');
     this.setState({
       songId,
-      startTime,
+      startTime: new Date(startTime).getTime(),
     });
-    console.log('query params', songId, startTime);
     socket.on(state.GAME_OVER, this.onGameOver);
   }
 
@@ -100,10 +100,6 @@ class ConductorView extends Component {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
-
-    console.log(this.gameObjects)
-
-
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
   }
 
@@ -164,9 +160,9 @@ class ConductorView extends Component {
     if (!this.state.gameStart) {
       ctx.fillStyle = 'black';
       ctx.font = "240px Arial";
-      let countDown = Math.ceil(3 - this.time);
+      let countDown = (this.countdown/1000) - this.time;
       if (countDown <= -1) { this.setState({ gameStart: true }) }
-      ctx.fillText(countDown <= 0 ? '🏁' : countDown, canvas.width / 2 - 70, canvas.height / 2);
+      ctx.fillText(countDown <= 0 ? '🏁' : Math.floor(countDown), canvas.width / 2 - 70, canvas.height / 2);
     }
   }
 
@@ -189,7 +185,8 @@ class ConductorView extends Component {
   }
 
   componentDidMount() {
-    this.lastTime = performance.now()
+    this.countdown = this.state.startTime - new Date().getTime();
+    this.lastTime = performance.now();
     this.initCanvas();
   }
 
