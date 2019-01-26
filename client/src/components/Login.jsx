@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { state } from '../../../common/gameConstants';
 
 export default class Login extends Component {
   constructor(props) {
@@ -8,12 +9,28 @@ export default class Login extends Component {
     };
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onUsernameChange = this.onUsernameChange.bind(this);
+    this.onRegistered = this.onRegistered.bind(this);
+  }
+
+  componentWillMount() {
+    socket.on(state.REGISTERED, this.onRegistered);
+  }
+
+  componentWillUnmount() {
+    socket.removeListener(state.REGISTERED, this.onRegistered);
+  }
+
+  onRegistered(response) {
+    const { vip, clientId } = response;
+    window.isVip = vip;
+    window.clientId = clientId;
+    this.context.router.history.push('/lobby');
   }
 
   onLoginClick() {
     const {username} = this.state;
     if (username !== '') {
-      window.socket.emit('REGISTER_USERNAME', username);
+      window.socket.emit(state.REGISTER_USERNAME, username);
     }
   }
 
