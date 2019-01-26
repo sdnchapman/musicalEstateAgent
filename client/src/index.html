@@ -5,9 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
   <title>Game Jam 2019</title>
 </head>
-
+<script>
+  var socket = io({transports: ['websocket'], upgrade: false});
+  console.log('Opened up a socket connection');
+</script>
 <body style="margin: 0; height: 100vh">
   <div id="root"></div>
 </body>
