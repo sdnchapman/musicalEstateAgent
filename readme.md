@@ -27,7 +27,7 @@ Navigate to the server directory.
 npm install
 ```
 
-####Run watch build
+#### Run watch build
 ```
 npm start
 ```
