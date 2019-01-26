@@ -91,17 +91,18 @@ class ConductorView extends Component {
 
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
-    bass.forEach((note, index) => {
-      if (trumpets[index] === 1) {
+    easy_bass.forEach((note, index) => {
+      if (easy_trumpets[index] === 1) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2))
       }
-      if(strings[index]) {
+      if(easy_strings[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0ffa0', canvas.height * 2))
       }
-      if(bass[index]) {
+      if(easy_bass[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
+    setTimeout(() => this.setState({ gameStart: true }), 5000);
     window.requestAnimationFrame(() => this.animationFrame(canvas, ctx, newDelta))
   }
 
@@ -162,8 +163,8 @@ class ConductorView extends Component {
     if (!this.state.gameStart) {
       ctx.fillStyle = 'black';
       ctx.font = "240px Arial";
-      let countDown = (this.countdown/1000) - this.time;
-      if (countDown <= -1) { this.setState({ gameStart: true }) }
+      let countDown = (5) - this.time;
+      // if (countDown <= -1) { this.setState({ gameStart: true }) }
       ctx.fillText(countDown <= 0 ? '🏁' : Math.floor(countDown), canvas.width / 2 - 70, canvas.height / 2);
     }
   }
@@ -176,6 +177,10 @@ class ConductorView extends Component {
 
     if (this.state.gameStart) {
       this.update(this.noteSpeed);
+
+      if(this.gameObjects.length <= 0){
+        socket.emit(state.CONDUCTOR_SONG_FINISHED);
+      }
     }
 
     this.renderGame(canvas, ctx);

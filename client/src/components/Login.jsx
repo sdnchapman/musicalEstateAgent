@@ -41,7 +41,6 @@ export default class Login extends Component {
   }
 
   render() {
-    console.log('trees are wierd');
     return (
       <div className="container">
         <div className="row shadow-lg bg-white p-4">
