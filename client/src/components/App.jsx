@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import ConductorView from './ConductorView';
 
 const App = () => {
   return (
-    <div>
-      YAHHH
-    </div>
+    <Fragment>
+      <ConductorView />
+    </Fragment>
   );
 };
 
