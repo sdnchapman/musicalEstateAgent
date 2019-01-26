@@ -89,13 +89,17 @@ io.on('connection', function(client){
      });
 
      client.on('SELECT_TEAM', function(data){
-        var i = connections.findIndex((conClient)=>(conClient.clientId===data.clientId));
+        var i = connections.findIndex((conClient)=>(conClient.clientData.clientId===data.clientId));
         connections[i].clientData.type = data.team;
         connections[i].client.emit("TEAM_SELECTED", connections[i].clientData.type);
      });
 
      client.on('EVERYBODY_READY', function(){
         selectConductor();
+     });
+
+     client.on('GAME_START', function(){
+
      });
 
      
