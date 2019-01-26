@@ -88,14 +88,17 @@ io.on('connection', function(client){
         connections[i].clientData.username += score;
      });
 
-     client.on('REGISTER_TYPE', function(team){
+     client.on('SELECT_TEAM', function(team){
         var i = connections.findIndex((conClient)=>(conClient.client===team));
         connections[i].clientData.type = team;
+        connections[i].client.emit("TEAM_SELECTED", connections[i].clientData.type);
      });
 
      client.on('EVERYBODY_READY', function(){
         selectConductor();
      });
+
+     
   });
 
   const selectConductor = () => {
