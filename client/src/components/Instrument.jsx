@@ -25,7 +25,6 @@ export default class Instrument extends Component {
       instrument: 1,
       notes: []
     };
-    this.countdown = 0;
     this.time = 0;
     this.lastTime = 0;
   }
@@ -44,37 +43,39 @@ export default class Instrument extends Component {
 
   selectTrack() {
     const { team, songId } = this.state;
-    let track = { instrument: 1, sheet: null, notes: null };
+    // let track = { instrument: 1, sheet: null, notes: null };
+    let instrument = 0;
+    let sheet = [];
     switch (team) {
       case 'RED': // trumpets
-        track.instrument = 660
-        track.sheet = songId === 1 ? trumpets_hard_notes : trumpets_easy_notes;
+        instrument = 660
+        sheet = (songId == 1 ? trumpets_hard_notes : trumpets_easy_notes);
         break;
       case 'GREEN':  // strings
-        track.instrument = 517
-        track.sheet = songId === 1 ? strings_hard_notes : strings_easy_notes;
+        instrument = 517
+        sheet = (songId == 1 ? strings_hard_notes : strings_easy_notes);
         break;
       case 'BLUE':  // bass
-        track.instrument = 478
-        track.sheet = songId === 1 ? bass_hard_notes : bass_easy_notes;
+        instrument = 478
+        sheet = (songId == 1 ? bass_hard_notes : bass_easy_notes);
         break;
     }
-    track.notes = [];
-    for (let i = 0; i < track.sheet.length; i++) {
-      if (track.sheet[i] > 0) {
-        let instant = [i + 1, track.sheet[i]];
-        track.notes.push(instant);
+
+    let notes = [];
+    for (let i = 0; i < sheet.length; i++) {
+      if (sheet[i] > 0) {
+        let instant = [i + 1, sheet[i]];
+        notes.push(instant);
       }
     }
-    return track;
+    return { instrument, notes };
   }
 
   componentDidMount() {
+    this.lastTime = performance.now()
     const { instrument, notes } = this.selectTrack();
     this.setState({ instrument, notes })
-    this.lastTime = performance.now()
     this.midiSounds.cacheInstrument(instrument);
-    this.countdown = this.state.startTime - new Date().getTime();
 
     let newTime = performance.now();
     const newDelta = (newTime - this.lastTime) / 1000;
@@ -112,7 +113,6 @@ export default class Instrument extends Component {
     }
 
     if (this.state.gameStart) {
-      // console.log(this.time)x;
       if (notes.length > 0 && this.time >= notes[0][0] + 0.1) {
         console.log('pop');
         //   // if (this.state.lockNote === false) {
