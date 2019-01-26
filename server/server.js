@@ -117,6 +117,56 @@ io.on('connection', function(client){
         }
         console.log("Conductor set game to start at: " + d);
      });
+
+     client.on('CONDUCTOR_SONG_FINISHED', function(){
+        for(var i = 0; i<connections.length; i++)
+        {
+            connections[i].client.emit("GAME_OVER");
+            console.log("GAME OVER");
+        }
+     });
+
+     client.on('REQUEST_SCORE', function(){
+        var redScore = 0;
+        var greenScore = 0;
+        var blueScore = 0;
+
+        var redPercentage = 50;
+        var greenPercentage = 60;
+        var bluePercentage = 70;
+
+        for(var i = 0; i<connections.length; i++)
+        {
+            if(connections[i].clientData.type !== "CONDUCTOR")
+            {
+                if(connections[i].clientData.type === "RED")
+                {
+                    redScore += connections[i].clientData.score;
+                }
+                if(connections[i].clientData.type === "BLUE")
+                {
+                    blueScore += connections[i].clientData.score;
+                }
+                if(connections[i].clientData.type === "GREEN")
+                {
+                    greenScore += connections[i].clientData.score;
+                }
+            }
+        }
+        var playerIndex = connections.findIndex((conClient)=>(conClient.client===client));
+
+        client.emit("FINAL_SCORE",{
+            "playerScore": connections[playerIndex].clientData.score,
+            "playerPercentage":85,
+            redScore,
+            greenScore,
+            blueScore,
+            redPercentage,
+            bluePercentage,
+            greenPercentage});
+
+        console.log("Final Scores Sent");
+     });
   });
 
   const selectConductor = () => {
