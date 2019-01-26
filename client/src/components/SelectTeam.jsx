@@ -15,9 +15,9 @@ class SelectTeam extends Component {
 
 const Team = ({name}) => {
   return(
-    <div>
+    <button>
       <h2>{name}</h2>
-    </div>
+    </button>
   )
 }
 

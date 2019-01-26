@@ -20,16 +20,16 @@ const Vip = () =>{
 
 const Button = ({content}) =>{
   return(
-    <div>
+    <button>
       <p>{content}</p>
-    </div>
+    </button>
   )
 }
 
 const Client = () =>{
   return(
     <div>
-      Waiting for all players...
+      Waiting for all players to join...
     </div>
   )
 }

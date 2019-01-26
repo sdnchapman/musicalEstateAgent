@@ -10,9 +10,9 @@ const Login = () => {
 
 const Button = () => {
   return (
-    <div className="button">
+    <button className="button">
       I'm a Login Button
-    </div>
+    </button>
   );
 };
 
