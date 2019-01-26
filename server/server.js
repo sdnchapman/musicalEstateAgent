@@ -25,6 +25,7 @@ io.on('connection', function(client){
                     "clientId": idCounter,
                     "username": "",
                     "score" : 0,
+                    "numberOfHits" : 0,
                     isVip},
                     client})
         
@@ -92,6 +93,7 @@ io.on('connection', function(client){
      client.on('REGISTER_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.score += score;
+        connections[i].clientData.numberOfHits++;
         console.log("ClientId " + connections[i].clientData.clientId + " scored " + score);
 
      });
@@ -130,9 +132,13 @@ io.on('connection', function(client){
         var greenScore = 0;
         var blueScore = 0;
 
-        var redPercentage = 50;
-        var greenPercentage = 60;
-        var bluePercentage = 70;
+        var redPercentage = 0;
+        var greenPercentage = 0;
+        var bluePercentage = 0;
+
+        var redPlayers = 0;
+        var bluePlayers = 0;
+        var greenPlayers = 0;
 
         for(var i = 0; i<connections.length; i++)
         {
@@ -141,14 +147,20 @@ io.on('connection', function(client){
                 if(connections[i].clientData.type === "RED")
                 {
                     redScore += connections[i].clientData.score;
+                    redPercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                    redPlayers++;
                 }
                 if(connections[i].clientData.type === "BLUE")
                 {
                     blueScore += connections[i].clientData.score;
+                    bluePercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                    bluePlayers++;
                 }
                 if(connections[i].clientData.type === "GREEN")
                 {
                     greenScore += connections[i].clientData.score;
+                    greenPercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                    greenPlayers++;
                 }
             }
         }
@@ -162,16 +174,33 @@ io.on('connection', function(client){
 
         var playerIndex = connections.findIndex((conClient)=>(conClient.client===client));
 
-        client.emit("FINAL_SCORE",{
-            "playerScore": connections[playerIndex].clientData.score,
-            "playerPercentage":85,
-            redScore,
-            greenScore,
-            blueScore,
-            redPercentage,
-            bluePercentage,
-            greenPercentage            
-        });
+        if(connections[playerIndex].clientData.type === "CONDUCTOR")
+        {
+            client.emit("FINAL_SCORE",{
+                "playerScore": (redScore + blueScore + greenScore)/(redPlayers + bluePlayers + greenPlayers),
+                "playerPercentage":(redPercentage + bluePercentage + greenPercentage)/(redPlayers + bluePlayers + greenPlayers),
+                "redScore" : redScore/redPlayers,
+                "greenScore": greenScore/greenPlayers,
+                "blueScore" : blueScore/bluePlayers,
+                "redPercentage" : redPercentage/redPlayers,
+                "bluePercentage" : bluePercentage/bluePlayers,
+                "greenPercentage" : greenPercentage/greenPlayers            
+            });
+        }
+        else{
+            client.emit("FINAL_SCORE",{
+                "playerScore": connections[playerIndex].clientData.score,
+                "playerPercentage":connections[playerIndex].clientData.score/connections[playerIndex].clientData.numberOfHits,
+                "redScore" : redScore/redPlayers,
+                "greenScore": greenScore/greenPlayers,
+                "blueScore" : blueScore/bluePlayers,
+                "redPercentage" : redPercentage/redPlayers,
+                "bluePercentage" : bluePercentage/bluePlayers,
+                "greenPercentage" : greenPercentage/greenPlayers            
+            });
+        }
+
+        
 
         console.log("Final Scores Sent");
      });
