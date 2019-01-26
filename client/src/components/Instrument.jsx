@@ -90,8 +90,8 @@ export default class Instrument extends Component {
     if (notes.length > 0 && this.time >= notes[0][0] - 1) {
       score = 100 - (notes[0][0] - this.time) * 100;
       notes.splice(0, 1);
-      let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
-      this.midiSounds.playChordNow(instrument, [frequency], 1);
+      // let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
+      this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
     } else {
       score = 0;
     }
