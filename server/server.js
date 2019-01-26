@@ -158,7 +158,7 @@ io.on('connection', function(client){
         vipIndex = connections.findIndex((conClient)=>(conClient.clientData.isVip));
         if(client === connections[vipIndex].client)
         {
-            client.emit("NEW_VIP"{"vip": true});
+            client.emit("NEW_VIP", {"vip": true});
             console.log("End Game VIP selected");
         }
 
