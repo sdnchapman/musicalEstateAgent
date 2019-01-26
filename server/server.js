@@ -49,7 +49,7 @@ io.on('connection', function(client){
         }
         connections.splice(i, 1);
         emitAll("Client " +  disconnectId + " disconnected" ); 
-        if(newVip)
+        if(connections.length >= 1 && newVip)
         {
             connections[0].clientData.isVip = true;
             connections[0].client.emit("clientInfo" , {"clientId": connections[0].clientData.clientId,
