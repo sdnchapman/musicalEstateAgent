@@ -85,7 +85,8 @@ io.on('connection', function(client){
 
      client.on('RECEIVE_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
-        connections[i].clientData.username += score;
+        connections[i].clientData.score += score;
+
      });
 
      client.on('SELECT_TEAM', function(data){
@@ -98,13 +99,13 @@ io.on('connection', function(client){
         selectConductor();
      });
 
-     client.on('GAME_START', function(){
+     client.on('CONDUCTOR_READY', function(){
         var d = new Date(milliseconds);
         var seconds = d.getSeconds() + 10;
         d = d + seconds;
         for(var i = 0; i<connections.length; i++)
         {
-            connections[i].client.emit("STARTING_GAME", {"clientData":connections[i].clientData, "startTime":  d});
+            connections[i].client.emit("GAME_START", {"clientData":connections[i].clientData, "startTime":  d});
         }
      });
   });
