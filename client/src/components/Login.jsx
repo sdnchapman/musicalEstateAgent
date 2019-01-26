@@ -41,7 +41,6 @@ export default class Login extends Component {
   }
 
   render() {
-    console.log('trees are wierd');
     return (
       <div className="login-container">
         <input placeholder="Enter username here!" value={this.state.username} onChange={this.onUsernameChange} type="text" />

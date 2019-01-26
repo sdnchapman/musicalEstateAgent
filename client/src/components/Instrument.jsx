@@ -40,7 +40,6 @@ export default class Instrument extends Component {
       startTime: new Date(startTime).getTime(),
       team,
     });
-    console.log('received componentWillMount', songId, startTime);
   }
 
   selectTrack() {
@@ -60,7 +59,6 @@ export default class Instrument extends Component {
         track.sheet = songId === 1 ? bass_hard_notes : bass_easy_notes;
         break;
     }
-
     track.notes = [];
     for (let i = 0; i < track.sheet.length; i++) {
       if (track.sheet[i] > 0) {
@@ -68,20 +66,14 @@ export default class Instrument extends Component {
         track.notes.push(instant);
       }
     }
-
     return track;
   }
 
-
-
   componentDidMount() {
-
-    const { instrument, notes } = this.selectTrack()
+    const { instrument, notes } = this.selectTrack();
     this.setState({ instrument, notes })
-    console.log(instrument)
     this.lastTime = performance.now()
     this.midiSounds.cacheInstrument(instrument);
-
     this.countdown = this.state.startTime - new Date().getTime();
 
     let newTime = performance.now();
@@ -94,15 +86,15 @@ export default class Instrument extends Component {
   onClick() {
     const { instrument, notes } = this.state;
     let score = 0;
-    if (this.time > notes[0][0] - 0.5 && this.time < notes[0][0] + 0.5 && !this.state.lockNote) {
-      score = Math.floor(100 - (200 * Math.abs(notes[0][0] - this.time)));
-      this.setState({ lockNote: true });
-      let frequency = score >= 75 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
+    if (notes.length > 0 && this.time >= notes[0][0] - 1) {
+      score = 100 - (notes[0][0] - this.time) * 100;
+      notes.splice(0, 1);
+      let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
       this.midiSounds.playChordNow(instrument, [frequency], 1);
     } else {
       score = 0;
     }
-    socket.emit(state.REGISTER_SCORE, score);
+    socket.emit(state.REGISTER_SCORE, Math.ceil(score));
   }
 
   animationFrame(deltaTime) {
@@ -111,25 +103,31 @@ export default class Instrument extends Component {
     this.time += deltaTime;
 
     if (!this.state.gameStart) {
-      let timeTillStart = (this.countdown / 1000) - this.time;
+      let timeTillStart = 5 - this.time;
       this.setState({ timeTillStart });
-      if (this.timeTillStart <= 0) {
-        this.time = 0;
+      if (timeTillStart <= 0) {
+        this.time = -1;
         this.setState({ gameStart: true });
       }
     }
-    if (this.time > notes[0][0] - 0.5 && this.time < notes[0][0] + 0.5) {
-      console.log('VALID');
-    }
 
     if (this.state.gameStart) {
-      if (notes.length > 0 && this.time >= notes[0][0] + 0.5) {
-        if (this.state.lockNote === false) {
-          socket.emit(state.REGISTER_SCORE, 0);
-        }
+      // console.log(this.time)x;
+      if (notes.length > 0 && this.time >= notes[0][0] + 0.1) {
+        console.log('pop');
+        //   // if (this.state.lockNote === false) {
+        socket.emit(state.REGISTER_SCORE, 0);
+        //   // }
         notes.splice(0, 1);
-        this.setState({ lockNote: false });
+        //   // this.setState({ lockNote: false });
+        //   if (this.time >= notes[0][0] - 0.5 && this.time <= notes[0][0] + 0.5) {
+        //     console.log('VALID');
+        //   }
       }
+
+      // if (notes.length <= 0) {
+      //   socket.emit(state.CONDUCTOR_SONG_FINISHED, score);
+      // }
     }
 
     const newDelta = (newTime - this.lastTime) / 1000;
@@ -141,7 +139,7 @@ export default class Instrument extends Component {
   render() {
     return (
       <Fragment>
-        <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" instruments={[3]} /></div>
+        <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
         <div>
           <button onClick={() => this.onClick()}>Make the sound!</button>
         </div>
