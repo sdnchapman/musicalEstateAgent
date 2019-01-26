@@ -16,13 +16,6 @@ export default class Instrument extends Component {
   constructor(props) {
     super(props);
 
-    this.notes = [];
-    for (let i = 0; i < song.length; i++) {
-      if (song[i] > 0) {
-        let instant = [i + 1, song[i]];
-        this.notes.push(instant);
-      }
-    }
     this.state = {
       gameStart: false,
       lockNote: false,
@@ -30,6 +23,7 @@ export default class Instrument extends Component {
       songId: false,
       timeTillStart: 0,
       instrument: 1,
+      notes: []
     };
     this.countdown = 0;
     this.time = 0;
@@ -49,27 +43,41 @@ export default class Instrument extends Component {
     console.log('received componentWillMount', songId, startTime);
   }
 
-  selectInstrument() {
-    const {team} = this.state;
-    let instrument = null;
-    switch(team) {
+  selectTrack() {
+    const { team, songId } = this.state;
+    let track = { instrument: 1, sheet: null, notes: null };
+    switch (team) {
       case 'RED': // trumpets
-        instrument = 660
+        track.instrument = 660
+        track.sheet = songId === 1 ? trumpets_hard_notes : trumpets_easy_notes;
         break;
       case 'GREEN':  // strings
-        instrument = 517
+        track.instrument = 517
+        track.sheet = songId === 1 ? strings_hard_notes : strings_easy_notes;
         break;
       case 'BLUE':  // bass
-        instrument = 478
+        track.instrument = 478
+        track.sheet = songId === 1 ? bass_hard_notes : bass_easy_notes;
         break;
     }
-    return instrument;
+
+    track.notes = [];
+    for (let i = 0; i < track.sheet.length; i++) {
+      if (track.sheet[i] > 0) {
+        let instant = [i + 1, track.sheet[i]];
+        track.notes.push(instant);
+      }
+    }
+
+    return track;
   }
+
+
 
   componentDidMount() {
 
-    const instrument = this.selectInstrument()
-    this.setState({instrument}) 
+    const { instrument, notes } = this.selectTrack()
+    this.setState({ instrument, notes })
     console.log(instrument)
     this.lastTime = performance.now()
     this.midiSounds.cacheInstrument(instrument);
@@ -84,12 +92,12 @@ export default class Instrument extends Component {
   }
 
   onClick() {
-    const{instrument} = this.state;
+    const { instrument, notes } = this.state;
     let score = 0;
-    if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5 && !this.state.lockNote) {
-      score = Math.floor(100 - (200 * Math.abs(this.notes[0][0] - this.time)));
+    if (this.time > notes[0][0] - 0.5 && this.time < notes[0][0] + 0.5 && !this.state.lockNote) {
+      score = Math.floor(100 - (200 * Math.abs(notes[0][0] - this.time)));
       this.setState({ lockNote: true });
-      let frequency = score >= 75 ? this.notes[0][1] : Math.floor((Math.random() * 20) + 50);
+      let frequency = score >= 75 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
       this.midiSounds.playChordNow(instrument, [frequency], 1);
     } else {
       score = 0;
@@ -98,6 +106,7 @@ export default class Instrument extends Component {
   }
 
   animationFrame(deltaTime) {
+    const { notes } = this.state;
     let newTime = performance.now();
     this.time += deltaTime;
 
@@ -109,16 +118,16 @@ export default class Instrument extends Component {
         this.setState({ gameStart: true });
       }
     }
-    if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5) {
+    if (this.time > notes[0][0] - 0.5 && this.time < notes[0][0] + 0.5) {
       console.log('VALID');
     }
 
     if (this.state.gameStart) {
-      if (this.notes.length > 0 && this.time >= this.notes[0][0] + 0.5) {
-        if(this.state.lockNote === false){
+      if (notes.length > 0 && this.time >= notes[0][0] + 0.5) {
+        if (this.state.lockNote === false) {
           socket.emit(state.REGISTER_SCORE, 0);
         }
-        this.notes.splice(0, 1);
+        notes.splice(0, 1);
         this.setState({ lockNote: false });
       }
     }
