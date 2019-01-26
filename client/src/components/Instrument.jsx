@@ -30,9 +30,11 @@ export default class Instrument extends Component {
     const params = new URLSearchParams(this.props.location.search);
     const songId = params.get('songId');
     const startTime = params.get('startTime');
+    const team = params.get('team');
     this.setState({
       songId,
       startTime,
+      team
     });
     console.log('received componentWillMount', songId, startTime);
   }
