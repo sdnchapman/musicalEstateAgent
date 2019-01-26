@@ -21,7 +21,6 @@ export default class Instrument extends Component {
     };
     this.time = 0;
     this.lastTime = 0;
-    this.onScored = this.onScored.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +42,7 @@ export default class Instrument extends Component {
     } else {
       score = 0;
     }
-    socket.emit(state.REGISTER_SCORE, points);
+    socket.emit(state.REGISTER_SCORE, score);
     let frequency = score >= 75 ? this.notes[0][1] : (Math.random() * 20) + 50;
     this.midiSounds.playChordNow(660, [frequency], 1);
   }

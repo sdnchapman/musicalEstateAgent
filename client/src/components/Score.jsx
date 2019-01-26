@@ -59,7 +59,6 @@ export default class Score extends Component {
   }
 
   render() {
-    const
     return (
       <div>
         <h3>Congrats! What an amazing performance!</h3>
