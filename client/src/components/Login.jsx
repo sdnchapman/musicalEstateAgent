@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 
 export default class Login extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       username: '',
     };
-
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onUsernameChange = this.onUsernameChange.bind(this);
   }

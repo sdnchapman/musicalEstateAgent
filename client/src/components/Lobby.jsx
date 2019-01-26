@@ -20,9 +20,7 @@ const Vip = () =>{
 
 const Button = ({content}) =>{
   return(
-    <button>
-      <p>{content}</p>
-    </button>
+    <button>{content}</button>
   )
 }
 
