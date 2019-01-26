@@ -100,7 +100,7 @@ io.on('connection', function(client){
      });
 
      client.on('CONDUCTOR_READY', function(){
-        var d = new Date(milliseconds);
+        var d = new Date();
         var seconds = d.getSeconds() + 10;
         d = d + seconds;
         for(var i = 0; i<connections.length; i++)
