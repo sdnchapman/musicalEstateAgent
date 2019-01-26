@@ -2,7 +2,14 @@ import React, { Component, Fragment } from 'react';
 import MIDISounds from 'midi-sounds-react';
 import { state } from "../../../common/gameConstants";
 
-const song = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
+const trumpets_hard_notes = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
+const strings_hard_notes = [0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 78, 0, 79, 0, 73, 0, 73, 0, 69, 62, 0, 0, 66, 0, 0, 69, 0, 0, 66, 0, 0, 69, 0, 0, 69, 0, 0];
+const bass_hard_notes = [43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 50, 0, 38, 49, 0, 43, 0, 0, 38, 0, 0, 0, 0, 38, 0];
+
+const trumpets_easy_notes = [60, 0, 64, 59, 0, 57, 0, 0, 0, 0, 0, 0, 55, 0, 57, 0];
+const strings_easy_notes = [0, 0, 0, 0, 0, 0, 0, 69, 0, 76, 0, 79, 71, 0, 0, 0];
+const bass_easy_notes = [0, 0, 64, 59, 0, 45, 0, 0, 0, 40, 0, 0, 0, 0, 45, 0];
+
 
 export default class Instrument extends Component {
 
@@ -22,6 +29,7 @@ export default class Instrument extends Component {
       startTime: false,
       songId: false,
       timeTillStart: 0,
+      instrument: 1,
     };
     this.countdown = 0;
     this.time = 0;
@@ -32,16 +40,39 @@ export default class Instrument extends Component {
     const params = new URLSearchParams(this.props.location.search);
     const songId = params.get('songId');
     const startTime = params.get('startTime');
+    const team = params.get('team');
     this.setState({
       songId,
       startTime: new Date(startTime).getTime(),
+      team,
     });
     console.log('received componentWillMount', songId, startTime);
   }
 
+  selectInstrument() {
+    const {team} = this.state;
+    let instrument = null;
+    switch(team) {
+      case 'RED': // trumpets
+        instrument = 660
+        break;
+      case 'GREEN':  // strings
+        instrument = 517
+        break;
+      case 'BLUE':  // bass
+        instrument = 478
+        break;
+    }
+    return instrument;
+  }
+
   componentDidMount() {
+
+    const instrument = this.selectInstrument()
+    this.setState({instrument}) 
+    console.log(instrument)
     this.lastTime = performance.now()
-    this.midiSounds.cacheInstrument(660);
+    this.midiSounds.cacheInstrument(instrument);
 
     this.countdown = this.state.startTime - new Date().getTime();
 
@@ -53,12 +84,13 @@ export default class Instrument extends Component {
   }
 
   onClick() {
+    const{instrument} = this.state;
     let score = 0;
     if (this.time > this.notes[0][0] - 0.5 && this.time < this.notes[0][0] + 0.5 && !this.state.lockNote) {
       score = Math.floor(100 - (200 * Math.abs(this.notes[0][0] - this.time)));
       this.setState({ lockNote: true });
       let frequency = score >= 75 ? this.notes[0][1] : Math.floor((Math.random() * 20) + 50);
-      this.midiSounds.playChordNow(660, [frequency], 1);
+      this.midiSounds.playChordNow(instrument, [frequency], 1);
     } else {
       score = 0;
     }
@@ -83,6 +115,9 @@ export default class Instrument extends Component {
 
     if (this.state.gameStart) {
       if (this.notes.length > 0 && this.time >= this.notes[0][0] + 0.5) {
+        if(this.state.lockNote === false){
+          socket.emit(state.REGISTER_SCORE, 0);
+        }
         this.notes.splice(0, 1);
         this.setState({ lockNote: false });
       }

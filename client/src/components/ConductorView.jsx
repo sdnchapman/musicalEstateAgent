@@ -9,7 +9,6 @@ const trumpets = [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0];
 const noteTravelTime = 2;
 const laneWidth = 10;
 const colors = ['red', 'green', 'blue'];
-const redNodes = bass;
 
 
 class Note {
@@ -90,13 +89,13 @@ class ConductorView extends Component {
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
     bass.forEach((note, index) => {
-      if (bass[index] === 1) {
+      if (trumpets[index] === 1) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#ffa0a0', canvas.height * 2))
       }
       if(strings[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0ffa0', canvas.height * 2))
       }
-      if(trumpets[index]) {
+      if(bass[index]) {
         this.gameObjects.push(new Note(0, (this.distanceToBar / 2) * -(index), '#a0a7ff', canvas.height * 2))
       }
     });
