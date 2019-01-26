@@ -94,6 +94,23 @@ io.on('connection', function(client){
      });
   });
 
+  const selectConductor = () => {
+    conductorSelect = Math.floor(Math.random() * connections.length);  
+    for(var i = 0; i<connections.length; i++)
+    {
+        if(i===conductorSelect)
+        {
+            connections[i].clientData.type = "CONDUCTOR";
+            connections[i].client.emit("CONDUCTOR_SETUP");
+        }
+        else
+        {
+            connections[i].clientData.type = "MUSICIAN";
+            connections[i].client.emit("MUSICIAN_SETUP");
+        }
+    }
+  }
+
   
    
 
