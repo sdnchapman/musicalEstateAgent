@@ -88,9 +88,9 @@ io.on('connection', function(client){
         connections[i].clientData.username += score;
      });
 
-     client.on('SELECT_TEAM', function(team){
-        var i = connections.findIndex((conClient)=>(conClient.client===team));
-        connections[i].clientData.type = team;
+     client.on('SELECT_TEAM', function(data){
+        var i = connections.findIndex((conClient)=>(conClient.clientId===data.clientId));
+        connections[i].clientData.type = data.team;
         connections[i].client.emit("TEAM_SELECTED", connections[i].clientData.type);
      });
 
