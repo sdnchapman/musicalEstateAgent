@@ -107,13 +107,13 @@ io.on('connection', function(client){
         selectConductor();
      });
 
-     client.on('CONDUCTOR_READY', function(){
+     client.on('CONDUCTOR_READY', function(difficulty){
         var d = new Date();
         var seconds = d.getSeconds() + 10;
         d = d + seconds;
         for(var i = 0; i<connections.length; i++)
         {
-            connections[i].client.emit("GAME_START", {"clientData":connections[i].clientData, "startTime":  d});
+            connections[i].client.emit("GAME_START", {"clientData":connections[i].clientData, "startTime":  d, songId: difficulty});
         }
         console.log("Conductor set game to start at: " + d);
      });
