@@ -3,7 +3,7 @@ import {state} from "../../../common/gameConstants";
 
 class SelectTeam extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.setTeam = this.setTeam.bind(this);
     this.onSelectTeam = this.onSelectTeam.bind(this);
     this.onGameStart = this.onGameStart.bind(this);
@@ -12,6 +12,13 @@ class SelectTeam extends Component {
   componentWillMount() {
     socket.on(state.TEAM_SELECTED, this.setTeam);
     socket.on(state.GAME_START, this.onGameStart);
+    const params = new URLSearchParams(this.props.location.search);
+    const songId = params.get('songId');
+    const startTime = params.get('startTime');
+    this.setState({
+      songId,
+      startTime,
+    });
   }
 
   componentWillUnmount() {
@@ -19,8 +26,9 @@ class SelectTeam extends Component {
     socket.removeListener(state.GAME_START, this.onGameStart);
   }
 
-  onGameStart(responce){
-    this.props.history.push('/instrument/');
+  onGameStart(response){
+    const { startTime, songId } = response;
+    this.props.history.push(`/instrument?songId=${songId}&startTime=${startTime}`);
   }
 
   setTeam(team){

@@ -19,9 +19,22 @@ export default class Instrument extends Component {
     this.state = {
       gameStart: false,
       lockNote: false,
+      startTime: false,
+      songId: false,
     };
     this.time = 0;
     this.lastTime = 0;
+  }
+
+  componentWillMount() {
+    const params = new URLSearchParams(this.props.location.search);
+    const songId = params.get('songId');
+    const startTime = params.get('startTime');
+    this.setState({
+      songId,
+      startTime,
+    });
+    console.log('received componentWillMount', songId, startTime);
   }
 
   componentDidMount() {
