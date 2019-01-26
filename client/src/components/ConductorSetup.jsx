@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class ConductorSetup extends Component {
@@ -97,7 +96,7 @@ export default class ConductorSetup extends Component {
           (screen === 8) && (
             <React.Fragment>
               <p>When you are ready to start playing, click the button below.</p>
-              <Link to="conductor"><button>Begin the song!</button></Link>
+              <Link to="/conductor"><button>Begin the song!</button></Link>
             </React.Fragment>
           )
         }
