@@ -109,13 +109,12 @@ io.on('connection', function(client){
 
      client.on('CONDUCTOR_READY', function(difficulty){
         var d = new Date();
-        var seconds = d.getSeconds() + 10;
-        d = d + seconds;
+        d.setSeconds(d.getSeconds() + 10);
         for(var i = 0; i<connections.length; i++)
         {
             connections[i].client.emit("GAME_START", {"clientData":connections[i].clientData, "startTime":  d, songId: difficulty});
         }
-        console.log("Conductor set game to start at: " + d);
+        console.log("Conductor set game to start at: " + d + "with a difficulty of " + difficulty);
      });
 
      client.on('CONDUCTOR_SONG_FINISHED', function(){
@@ -152,7 +151,6 @@ io.on('connection', function(client){
                     greenScore += connections[i].clientData.score;
                 }
             }
-           
         }
 
         vipIndex = connections.findIndex((conClient)=>(conClient.clientData.isVip));
@@ -196,8 +194,6 @@ io.on('connection', function(client){
             connections[i].clientData.type = "CONDUCTOR";
             connections[i].client.emit("CONDUCTOR_SETUP");
             console.log("ClientId " + connections[i].clientData.clientId + " set as conductor");
-    
-            
         }
         else
         {
@@ -207,9 +203,6 @@ io.on('connection', function(client){
         }
     }
   }
-
-  
-   
 
   const emitAll = (data) => {
       for(var i = 0; i<connections.length; i++)
