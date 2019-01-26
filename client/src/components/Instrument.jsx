@@ -138,17 +138,22 @@ export default class Instrument extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
-        <div>
-          <button onClick={() => this.onClick()}>Make the sound!</button>
+      <React.Fragment>
+        <div className="container mt-4 p-4 bg-primary">
+          <h4>Only thing better than a beautiful instrument, is a golf club. ⛳</h4>
         </div>
-        {this.state.timeTillStart >= 0 && (
-          <h1>
-            {Math.floor(this.state.timeTillStart)}
-          </h1>
-        )}
-      </Fragment>
+        <div className="container mb-4 p-4 bg-white">
+          <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
+          <div>
+            <button className="btn btn-dark text-light" onClick={() => this.onClick()}>Make the sound!</button>
+          </div>
+          {this.state.timeTillStart >= 0 && (
+            <h1>
+              {Math.floor(this.state.timeTillStart)}
+            </h1>
+          )}
+        </div>
+      </React.Fragment>
     );
   }
 }
