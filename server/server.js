@@ -14,16 +14,16 @@ var idCounter = 1;
 
 io.on('connection', function(client){
     var isVip = false;
-    if(connections.length===0){
+    /*if(connections.length===0){
         isVip = true;
     }
     else{
         isVip = false;
-    }
+    }*/
     connections.push({"clientData": {
                     "type" : "test",
                     "clientId": idCounter,
-                    "username": "bob"+idCounter,
+                    "username": "",
                     "score" : 0,
                     isVip},
                     client})
@@ -49,11 +49,24 @@ io.on('connection', function(client){
         }
         connections.splice(i, 1);
         emitAll("Client " +  disconnectId + " disconnected" ); 
+
         if(connections.length >= 1 && newVip)
         {
-            connections[0].clientData.isVip = true;
-            connections[0].client.emit("clientInfo" , {"clientId": connections[0].clientData.clientId,
-            "vip": true});
+            var vipIndex = 0;
+            var vipFound = false;
+            while(!vipFound)
+            {
+                if(connections[vipIndex].clientData.username !== "")
+                {
+                    vipFound = true;
+                    connections[0].clientData.isVip = true;
+                    connections[0].client.emit("NEW_VIP" , {"clientId": connections[0].clientData.clientId,
+                    "vip": true});
+                }
+                else{
+                    vipIndex++;
+                }
+            }          
         }
      });
 
@@ -61,13 +74,27 @@ io.on('connection', function(client){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username = username;
         console.log(username);
+
+        if(connections.findIndex((conClient)=>(conClient.clientData.isVip)) === -1)
+        {
+            connections[0].clientData.isVip = true;
+            connections[0].client.emit("REGISTERED" , {"clientId": connections[0].clientData.clientId,
+            "vip": true});
+        }
+
      });
 
-     client.on('receiveScore', function(score){
+     client.on('RECEIVE_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.username += score;
      });
-  });  
+  });
+
+  client.on('REGISTER_TYPE', function(team){
+    var i = connections.findIndex((conClient)=>(conClient.client===client));
+    connections[i].clientData.type = team;
+ });
+   
 
   const emitAll = (data) => {
       for(var i = 0; i<connections.length; i++)
