@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {state} from "../../../common/gameConstants";
 
 const noteTravelTime = 2;
 const laneWidth = 10;
@@ -47,6 +48,24 @@ class ConductorView extends Component {
     this.lastTime = 0;
     this.distanceToBar = 0;
     this.noteSpeed = 0
+
+    this.onSongEnd = this.onSongEnd.bind(this);
+  }
+
+  onSongEnd() {
+    socket.emit(state.CONDUCTOR_SONG_FINISHED);
+  }
+
+  componentWillMount() {
+    socket.on(state.FINAL_SCORE, this.onFinalScore);
+  }
+
+  componentWillUnmount() {
+    socket.removeListener(state.FINAL_SCORE, this.onFinalScore);
+  }
+
+  onFinalScore() {
+    this.props.history.push('/score?score=123');
   }
 
   initCanvas() {
