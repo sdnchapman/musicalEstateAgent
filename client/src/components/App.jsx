@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Router>
       <Fragment>
-        <div className="app-container _flex" class="_ms _ps _bg-background-light _text-center">
+        <div className="app-container _flex" className="_ms _ps _bg-background-light _text-center">
           <Route path="/" exact component={Login} />
           <Route path="/lobby/" exact component={Lobby} />
           <Route path="/teams/" exact component={SelectTeam} />
