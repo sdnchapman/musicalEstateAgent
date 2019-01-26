@@ -45,7 +45,7 @@ class SelectTeam extends Component {
     const {team} = window;
     return (
       <React.Fragment>
-        <div className="container mt-4 mb-4 p-4 bg-white">
+          <div className="container mt-4 mb-4 p-4 bg-white">
           {team === undefined ? <h2>Select Your Team!</h2> :
             <div>
               <h3>You are in the {team} team!</h3>
