@@ -22,19 +22,25 @@ class MusicTest extends Component {
   }
 
   playSequenceTrumpets() {
-    // [60, 0, 64, 59, 0, 57, 0, 0, 0, 0, 0, 0, 55, 0, 57].forEach((pitch, index) => {
-    //   setTimeout(() =>this.playTrumpet(pitch), 1000 * index);
-    // });
     [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0].forEach((pitch, index) => {
       setTimeout(() =>this.playTrumpet(pitch), 1000 * index);
     });
   }
 
+  playTrumpetEasy() {
+    [60, 0, 64, 59, 0, 57, 0, 0, 0, 0, 0, 0, 55, 0, 57, 0].forEach((pitch, index) => {
+      setTimeout(() =>this.playTrumpet(pitch), 1000 * index);
+    });
+  }
+
   playSequenceBass() {
-    // [0, 0, 64, 59, 0, 45, 0, 0, 0, 40, 0, 0, 0, 0, 45].forEach((pitch, index) => {
-    //   setTimeout(() =>this.playBass(pitch), 1000 * index);
-    // });
     [43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 50, 0, 38, 49, 0, 43, 0, 0, 38, 0, 0, 0, 0, 38, 0].forEach((pitch, index) => {
+      setTimeout(() =>this.playBass(pitch), 1000 * index);
+    });
+  }
+
+  playBassEasy() {
+    [0, 0, 64, 59, 0, 45, 0, 0, 0, 40, 0, 0, 0, 0, 45, 0].forEach((pitch, index) => {
       setTimeout(() =>this.playBass(pitch), 1000 * index);
     });
   }
@@ -45,10 +51,22 @@ class MusicTest extends Component {
     });
   }
 
+  playStringsEasy() {
+    [0, 0, 0, 0, 0, 0, 0, 69, 0, 76, 0, 79, 71, 0, 0, 0].forEach((pitch, index) => {
+        setTimeout(() =>this.playBass(pitch), 1000 * index);
+      });
+  }
+
   playAll() {
     this.playSequenceStrings()
     this.playSequenceBass()
     this.playSequenceTrumpets()
+  }
+
+  playAll2() {
+    this.playStringsEasy()
+    this.playBassEasy()
+    this.playTrumpetEasy()
   }
 
   componentDidMount(){
@@ -64,7 +82,8 @@ class MusicTest extends Component {
         <p><button onClick={() => this.playSequenceBass()}>Bass</button></p>
         <p><button onClick={() => this.playSequenceStrings()}>Strings</button></p>
         <p><button onClick={() => this.playSequenceTrumpets()}>Trumpets</button></p>
-        <p><button onClick={() => this.playAll()}>All</button></p>
+        <p><button onClick={() => this.playAll()}>Hard</button></p>
+        <p><button onClick={() => this.playAll2()}>Easy</button></p>
         <MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" instruments={[3]} />	
       </div>
     );
