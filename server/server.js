@@ -135,6 +135,14 @@ io.on('connection', function(client){
     }
      });
 
+     client.on('REGISTER_VIEWER', function(){
+        var i = connections.findIndex((conClient)=>(conClient.client===client));
+        connections[i].clientData.type = "VIEWER";
+        
+        console.log("ClientId " + connections[i].clientData.clientId + " scored " + score);
+
+     });
+
      client.on('REGISTER_SCORE', function(score){
         var i = connections.findIndex((conClient)=>(conClient.client===client));
         connections[i].clientData.score += score;

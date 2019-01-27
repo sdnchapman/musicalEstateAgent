@@ -96,17 +96,20 @@ export default class Instrument extends Component {
   }
 
   onClick() {
-    const { instrument, notes } = this.state;
-    let score = 0;
-    if (notes.length > 0 && this.time >= notes[0][0] - 1) {
-      score = 100 - (notes[0][0] - this.time) * 100;
-      notes.splice(0, 1);
-      // let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
-      this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
-    } else {
-      score = 0;
+    if (this.state.gameStart) {
+      const { instrument, notes } = this.state;
+      let score = 0;
+      if (notes.length > 0 && this.time >= notes[0][0] - 0.5 && this.time <= notes[0][0] + 0.5) {
+        score = 100 - (Math.abs(notes[0][0] - this.time)) * 100;
+        console.log(score);
+        notes.splice(0, 1);
+        // let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
+        this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
+      } else {
+        score = 0;
+      }
+      socket.emit(state.REGISTER_SCORE, Math.ceil(score));
     }
-    socket.emit(state.REGISTER_SCORE, Math.ceil(score));
   }
 
   animationFrame(deltaTime) {
@@ -124,7 +127,7 @@ export default class Instrument extends Component {
     }
 
     if (this.state.gameStart) {
-      if (notes.length > 0 && this.time >= notes[0][0] + 0.1) {
+      if (notes.length > 0 && this.time >= notes[0][0] + 0.4) {
         console.log('pop');
         //   // if (this.state.lockNote === false) {
         socket.emit(state.REGISTER_SCORE, 0);
@@ -148,7 +151,7 @@ export default class Instrument extends Component {
   }
 
   render() {
-    const {team} = this.state;
+    const { team } = this.state;
     return (
       <React.Fragment>
         <div className="container mt-4 p-4 bg-primary">
@@ -158,9 +161,9 @@ export default class Instrument extends Component {
           <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
           <div>
             <button className="btn text-light insturment-button" onClick={() => this.onClick()}>
-            {team == "RED" ? <img src="/trumpet.png" className="col-md-6 col-xs-12"/>:""}
-            {team == "GREEN" ? <img src="/violin.png" className="col-md-6 col-xs-12"/>:""}
-            {team == "BLUE" ? <img src="/bass.png" className="col-md-6 col-xs-12"/>:""}
+              {team == "RED" ? <img src="/trumpet.png" className="col-md-6 col-xs-12" /> : ""}
+              {team == "GREEN" ? <img src="/violin.png" className="col-md-6 col-xs-12" /> : ""}
+              {team == "BLUE" ? <img src="/bass.png" className="col-md-6 col-xs-12" /> : ""}
             </button>
           </div>
           {this.state.timeTillStart >= 0 && (
