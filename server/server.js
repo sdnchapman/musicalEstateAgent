@@ -53,6 +53,25 @@ io.on('connection', function(client){
         connections.splice(i, 1);
         emitAll("Client " +  disconnectId + " disconnected" ); 
 
+        var playerCount = 0;
+        for(var pCountIndex = 0; pCountIndex<connections.length; pCountIndex++)
+        {
+            if(connections[pCountIndex].clientData.username != "")
+            {
+                playerCount++;
+            }
+        }
+
+        for(var pCountIndex = 0; pCountIndex<connections.length; pCountIndex++)
+        {
+            if(connections[pCountIndex].clientData.username != "")
+            {
+                connections[pCountIndex].client.emit("PLAYER_COUNT", playerCount);
+            }
+        }
+
+
+
         if(connections.length >= 1 && newVip)
         {
             var vipIndex = 0;
@@ -96,6 +115,23 @@ io.on('connection', function(client){
         
         connections[i].client.emit("REGISTERED" , {"clientId": connections[i].clientData.clientId,
         "vip": connections[i].clientData.isVip});
+
+        var playerCount = 0;
+        for(var pCountIndex = 0; pCountIndex<connections.length; pCountIndex++)
+        {
+            if(connections[pCountIndex].clientData.username != "")
+            {
+                playerCount++;
+            }
+        }
+
+        for(var pCountIndex = 0; pCountIndex<connections.length; pCountIndex++)
+        {
+            if(connections[pCountIndex].clientData.username != "")
+            {
+                connections[pCountIndex].client.emit("PLAYER_COUNT", playerCount);
+            }
+        }
     }
      });
 
@@ -137,6 +173,7 @@ io.on('connection', function(client){
         }
      });
 
+   
      client.on('REQUEST_SCORE', function(){
         var redScore = 0;
         var greenScore = 0;
