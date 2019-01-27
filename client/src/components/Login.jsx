@@ -47,7 +47,7 @@ export default class Login extends Component {
         <div className="row shadow-lg bg-white p-4">
           <img src="/logo_gif.gif" className="col-md-6 col-xs-12"/>
           <div className="col-md-6 col-xs-12 text-left">
-            <h2 className="text-danger mb-0">A social musical construction experience</h2>
+            <h2 className="text-danger mb-0">A social musical real estate experience</h2>
             <h4 className="text-secondary">On the beat of property</h4>
           </div>
         </div>

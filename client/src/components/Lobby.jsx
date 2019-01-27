@@ -71,7 +71,6 @@ const houseTypes = [
   'terrace',
   'loft conversion',
   'barn conversion',
-  'assisted living ',
   'hut',
   'cottage',
   'ranch',
@@ -181,6 +180,9 @@ export default class Lobby extends Component {
                 )
                 : <Client/>
             }
+            <h4 className="text-white bg-danger p-2 mt-4">
+              🔈 🔈 🔈 This game requires sound to play from your device. Please turn up the media volume. 🔈 🔈 🔈
+            </h4>
           </div>
         </div>
         <Motivation />

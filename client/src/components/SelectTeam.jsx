@@ -54,12 +54,12 @@ class SelectTeam extends Component {
     return (
       <React.Fragment>
           <div className="container mt-4 mb-4 p-4 bg-white">
-          {team === undefined ? <h2>Select Your Team!</h2> :
+          {team === undefined ? <h2>The conductor will tell you which team to join!</h2> :
             <div>
               <h3>You are in the {team} team!</h3>
-              <p>Soon you will be given your instrument</p>
-              <p>Pay attention to the conductor</p>
-              <p>When the conductor points at you play it by pressing the button</p>
+              <p>Relax! The show will begin soon.</p>
+              <p>When the song starts you will see your instrument.</p>
+              <p>When the conductor points at you, tap your instrument to play the note. </p>
               <br/>
               <h4>Change Team</h4>
             </div>
