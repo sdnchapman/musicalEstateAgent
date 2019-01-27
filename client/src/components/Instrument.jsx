@@ -81,6 +81,7 @@ export default class Instrument extends Component {
         notes.push(instant);
       }
     }
+
     return { instrument, notes };
   }
 
@@ -103,10 +104,9 @@ export default class Instrument extends Component {
       let score = 0;
       if (notes.length > 0 && this.time >= notes[0][0] - 0.5 && this.time <= notes[0][0] + 0.5) {
         score = 100 - (Math.abs(notes[0][0] - this.time)) * 100;
-        console.log(score);
+        this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
         notes.splice(0, 1);
         // let frequency = score >= 50 ? notes[0][1] : Math.floor((Math.random() * 20) + 50);
-        this.midiSounds.playChordNow(instrument, [notes[0][1]], 1);
       } else {
         score = 0;
       }
@@ -130,7 +130,7 @@ export default class Instrument extends Component {
 
     if (this.state.gameStart) {
       if (notes.length > 0 && this.time >= notes[0][0] + 0.4) {
-        console.log('pop');
+        console.log('pop : missed');
         //   // if (this.state.lockNote === false) {
         socket.emit(state.REGISTER_SCORE, 0);
         //   // }
