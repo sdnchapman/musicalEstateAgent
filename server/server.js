@@ -265,8 +265,8 @@ io.on('connection', function(client){
             redPercentage=0;
         }
         else{
-            redScore=redScore/redPlayers;
-            redPercentage=redPercentage/redPlayers;
+            redScore=Math.floor(redScore/redPlayers);
+            redPercentage=Math.floor(redPercentage/redPlayers);
         }
 
         if(greenPlayers === 0)
@@ -275,8 +275,8 @@ io.on('connection', function(client){
             greenPercentage=0;
         }
         else{
-            greenScore=greenScore/greenPlayers;
-            greenPercentage=greenPercentage/greenPlayers;
+            greenScore=Math.floor(greenScore/greenPlayers);
+            greenPercentage=Math.floor(greenPercentage/greenPlayers);
         }
 
         if(bluePlayers === 0)
@@ -285,8 +285,8 @@ io.on('connection', function(client){
             bluePercentage=0;
         }
         else{
-            blueScore=blueScore/bluePlayers;
-            bluePercentage=bluePercentage/bluePlayers;
+            blueScore=Math.floor(blueScore/bluePlayers);
+            bluePercentage=Math.floor(bluePercentage/bluePlayers);
         }
 
 
@@ -299,8 +299,8 @@ io.on('connection', function(client){
 
             if(redPlayers >= 1 || bluePlayers >= 1 || greenPlayers >= 1 )
             {
-                conductorPlayerScore = (redScore + blueScore + greenScore)/(redPlayers + bluePlayers + greenPlayers);
-                conductorPlayerPercentage =  (redPercentage + bluePercentage + greenPercentage)/(redPlayers + bluePlayers + greenPlayers);
+                conductorPlayerScore = Math.floor((redScore + blueScore + greenScore)/(redPlayers + bluePlayers + greenPlayers));
+                conductorPlayerPercentage =  Math.floor((redPercentage + bluePercentage + greenPercentage)/(redPlayers + bluePlayers + greenPlayers));
             }   
 
             client.emit("FINAL_SCORE",{
@@ -417,8 +417,8 @@ io.on('connection', function(client){
         redPercentage=0;
     }
     else{
-        redScore=redScore/redPlayers;
-        redPercentage=redPercentage/redPlayers;
+        redScore=Math.floor(redScore/redPlayers);
+        redPercentage=Math.floor(redPercentage/redPlayers);
     }
 
     if(greenPlayers === 0)
@@ -427,8 +427,8 @@ io.on('connection', function(client){
         greenPercentage=0;
     }
     else{
-        greenScore=greenScore/greenPlayers;
-        greenPercentage=greenPercentage/greenPlayers;
+        greenScore=Math.floor(greenScore/greenPlayers);
+        greenPercentage=Math.floor(greenPercentage/greenPlayers);
     }
 
     if(bluePlayers === 0)
@@ -437,8 +437,8 @@ io.on('connection', function(client){
         bluePercentage=0;
     }
     else{
-        blueScore=blueScore/bluePlayers;
-        bluePercentage=bluePercentage/bluePlayers;
+        blueScore=Math.floor(blueScore/bluePlayers);
+        bluePercentage=Math.floor(bluePercentage/bluePlayers);
     }
 
     return {
