@@ -341,9 +341,21 @@ io.on('connection', function(client){
   });
 
   const selectConductor = () => {
+    var conductorSelected = false;
+    var conductorSelect;
+    while(!conductorSelected)
+    {
+        conductorSelect = Math.floor(Math.random() * connections.length); 
+        if(connections[conductorSelect].clientData.username !== "")
+        {
+            conductorSelected = true;
+        }
+    }
     conductorSelect = Math.floor(Math.random() * connections.length);  
     for(var i = 0; i<connections.length; i++)
     {
+        if(connections[i].clientData.username !== "")
+        {
         if(i===conductorSelect)
         {
             connections[i].clientData.type = "CONDUCTOR";
@@ -356,6 +368,7 @@ io.on('connection', function(client){
             connections[i].client.emit("MUSICIAN_SETUP");
             console.log("ClientId " + connections[i].clientData.clientId + " set as musician");
         }
+    }
     }
   }
 
