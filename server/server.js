@@ -371,7 +371,6 @@ io.on('connection', function(client){
    });
 
   const getScores = () =>{
-      console.log("Web Service Call");
     var redScore = 0;
     var greenScore = 0;
     var blueScore = 0;
