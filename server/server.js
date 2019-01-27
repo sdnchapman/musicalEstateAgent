@@ -22,6 +22,9 @@ io.on('connection', function(client){
     else{
         isVip = false;
     }*/
+
+
+
     connections.push({"clientData": {
                     "type" : "test",
                     "clientId": idCounter,
@@ -29,7 +32,9 @@ io.on('connection', function(client){
                     "score" : 0,
                     "numberOfHits" : 0,
                     isVip},
-                    client})
+                    client});
+    getScores();
+
         
     client.emit("clientInfo" , {"clientId": idCounter,
                                 "vip": isVip});
@@ -360,6 +365,91 @@ io.on('connection', function(client){
           connections[i].client.emit("data", data);
       }
   }
+
+  app.get("/get_scores", (req, res, next) => {
+    res.json(getScores());
+   });
+
+  const getScores = () =>{
+      console.log("Web Service Call");
+    var redScore = 0;
+    var greenScore = 0;
+    var blueScore = 0;
+
+    var redPercentage = 0;
+    var greenPercentage = 0;
+    var bluePercentage = 0;
+
+    var redPlayers = 0;
+    var bluePlayers = 0;
+    var greenPlayers = 0;
+
+    for(var i = 0; i<connections.length; i++)
+    {
+        if(connections[i].clientData.type !== "CONDUCTOR")
+        {
+            if(connections[i].clientData.type === "RED")
+            {
+                redScore += connections[i].clientData.score;
+                redPercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                redPlayers++;
+            }
+            if(connections[i].clientData.type === "BLUE")
+            {
+                blueScore += connections[i].clientData.score;
+                bluePercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                bluePlayers++;
+            }
+            if(connections[i].clientData.type === "GREEN")
+            {
+                greenScore += connections[i].clientData.score;
+                greenPercentage += connections[i].clientData.score/connections[i].clientData.numberOfHits;
+                greenPlayers++;
+            }
+        }
+    }
+
+
+
+    if(redPlayers === 0)
+    {
+        redScore=0;
+        redPercentage=0;
+    }
+    else{
+        redScore=redScore/redPlayers;
+        redPercentage=redPercentage/redPlayers;
+    }
+
+    if(greenPlayers === 0)
+    {
+        greenScore=0;
+        greenPercentage=0;
+    }
+    else{
+        greenScore=greenScore/greenPlayers;
+        greenPercentage=greenPercentage/greenPlayers;
+    }
+
+    if(bluePlayers === 0)
+    {
+        blueScore=0;
+        bluePercentage=0;
+    }
+    else{
+        blueScore=blueScore/bluePlayers;
+        bluePercentage=bluePercentage/bluePlayers;
+    }
+
+    return {
+            redScore,
+            greenScore,
+            blueScore,
+            redPercentage,
+            bluePercentage,
+            greenPercentage            
+        };
+    }
 
 server.listen(8080);
 console.log('Server is alive');
