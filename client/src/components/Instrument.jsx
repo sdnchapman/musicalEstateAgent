@@ -27,9 +27,12 @@ export default class Instrument extends Component {
     };
     this.time = 0;
     this.lastTime = 0;
+
+    this.onGameOver = this.onGameOver.bind(this);
   }
 
   componentWillMount() {
+    socket.on(state.GAME_OVER, this.onGameOver);
     const params = new URLSearchParams(this.props.location.search);
     const songId = params.get('songId');
     const startTime = params.get('startTime');
@@ -39,6 +42,14 @@ export default class Instrument extends Component {
       startTime: new Date(startTime).getTime(),
       team,
     });
+  }
+
+  componentWillUnmount() {
+    socket.removeListener(state.GAME_OVER, this.onGameOver);
+  }
+
+  onGameOver() {
+    this.props.history.push(`/score`);
   }
 
   selectTrack() {
