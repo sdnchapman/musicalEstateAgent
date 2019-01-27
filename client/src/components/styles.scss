@@ -33,10 +33,22 @@
   width: 300px;
   background-size: cover;
 }
+.insturment-button{
+  height:60vh
+}
+
+.insturment-button:active{
+  img{
+    width: 80%;
+    height: 80%;
+  }
+}
 
 body {
   background: none;
 }
+
+
 
 @keyframes pulse_animation {
   0% { transform: scale(1); }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {state} from "../../../common/gameConstants";
 
-const easy_trumpets = [1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0];
-const easy_strings = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0];
-const easy_bass = [0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
+const easy_trumpets = [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0];
+const easy_strings = [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0];
+const easy_bass = [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0];
 
 const hard_trumpets = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0];
 const hard_strings = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0];
@@ -91,9 +91,9 @@ class ConductorView extends Component {
 
     this.distanceToBar = (canvas.height / 1.1) + laneWidth / 2; // distance to bar
 
-    const bassMusic = this.state.songId === 0 ? easy_bass : hard_bass;
-    const trumpetMusic = this.state.songId === 0 ? easy_trumpets : hard_trumpets;
-    const stringsMusic = this.state.songId === 0 ? easy_strings : hard_strings;
+    const bassMusic = this.state.songId == 0 ? easy_bass : hard_bass;
+    const trumpetMusic = this.state.songId == 0 ? easy_trumpets : hard_trumpets;
+    const stringsMusic = this.state.songId == 0 ? easy_strings : hard_strings;
 
     bassMusic.forEach((note, index) => {
       if (trumpetMusic[index] === 1) {
