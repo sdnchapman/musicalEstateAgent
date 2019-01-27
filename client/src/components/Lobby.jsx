@@ -2,6 +2,26 @@ import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
 import VIP from "./VIP";
 
+const adjectives = [
+  'charming',
+  'unique',
+  'characterful',
+  'sea facing',
+  'penthouse',
+  'spacious',
+  'cute',
+  'well-built',
+  'large',
+  'run down',
+  'grade 2 listed',
+  'grade 1 listed',
+  'picturesque',
+  'beachfront',
+  'centrally located',
+  'dank',
+  'open plan',
+];
+
 const housePictures = [
   'bathroom1',
   'bedroom1',
@@ -43,6 +63,10 @@ const houseTypes = [
 
 const getRandomHouseImagePath = () => {
   return '/' + housePictures[Math.floor(Math.random() * housePictures.length)] + '.jpg';
+};
+
+const getRandomAdjective = () => {
+  return adjectives[Math.floor(Math.random() * adjectives.length)];
 };
 
 const getRandomHouseType = () => {
@@ -115,7 +139,7 @@ export default class Lobby extends Component {
         <div className="p-4 bg-white">
           <div className="container">
             <h1 className="text-secondary">
-              {`${playerCount} bedroom ${getRandomHouseType()} Lobby`}
+              {`A ${getRandomAdjective()} ${playerCount} bedroom ${getRandomHouseType()} Lobby`}
             </h1>
             {
               window.isVip ? (

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {state} from '../../../common/gameConstants';
+import Reviews from "./Reviews";
 
 export default class Login extends Component {
   constructor(props) {
@@ -73,21 +74,43 @@ export default class Login extends Component {
             </span>
           </div>
         </div>
-        <div className="row shadow-lg p-4 mt-4 bg-secondary text-light">
-          <div className="col-6 col-md-3">
-            <h3>Reviews*</h3>
-            <span>(* May not directly apply to our product or service)</span>
-          </div>
-          <div className="col-6 col-md-9">
-            <div className="speech-bubble">Very pleased with the quality of these bricks, although a little expensive.</div>
-          </div>
-        </div>
         <div className="row shadow-lg mt-4 bg-light text-dark text-light">
           <div className="ladder-image col-12 col-md-4" style={{'background-image': "url(/ladder.jpeg)" }} />
           <div className="col-8 p-4">
             <h3 className="text-info">Scale the housing ladder ⚖️</h3>
-            <p className="text-secondary">Don't settle do A minor flat. 🎵</p>
+            <p className="text-secondary">Don't settle for A minor flat. 🎵</p>
             <p className="text-secondary">C major improvements in your property valuations! 💸 They will be Alto this world. 🌍</p>
+          </div>
+        </div>
+        <Reviews />
+        <div className="row shadow-lg p-4 mt-4 bg-white">
+          <div className="col-12 mb-2">
+            <h4 className="mb-0">A Global Game Jam 2019 Project</h4>
+            <a href="https://globalgamejam.org/2019/games/musical-estate-agent">Find out more here!</a>
+          </div>
+          <div className="col-6 col-md-3">
+            <h5>Residential Property</h5>
+            <a  href="">For Sale</a><br/>
+            <a  href="/">For Rent</a><br/>
+            <a href="/">For Aspiring Band Members</a><br/>
+          </div>
+          <div className="col-6 col-md-3">
+            <h5>Commercial Property</h5>
+            <a  href="">Offices to Rent</a><br/>
+            <a  href="/">Warehouses to Rent</a><br/>
+            <a href="/">Band Practise Space</a><br/>
+          </div>
+          <div className="col-6 col-md-3">
+            <h5>Fees & Charges</h5>
+            <a  href="">Residential Charges</a><br/>
+            <a  href="/">Instrument Hire Costs</a><br/>
+            <a href="/">Gig Tickets</a><br/>
+          </div>
+          <div className="col-6 col-md-3">
+            <h5>Talk to Us</h5>
+            <a  href="">We don't have an office yet</a><br/>
+            <a  href="/">Fax us on (1234) 31234</a><br/>
+            <a href="/">Or join our orchestra today</a><br/>
           </div>
         </div>
       </div>
