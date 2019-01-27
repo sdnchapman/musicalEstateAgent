@@ -23,7 +23,7 @@
 
 .pulse {
   animation-name: pulse_animation;
-  transform-origin:70% 70%;
+  transform-origin: 70% 70%;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
@@ -34,18 +34,46 @@
   background-size: cover;
 }
 
+.ladder-image {
+  background-position: center;
+  background-size: cover;
+}
+
 .office-image {
   min-height: 300px;
   min-width: 300px;
   background-size: cover;
 }
 
-.insturment-button{
-  height:60vh
+.speech-bubble {
+  position: relative;
+  background: white;
+  color: black;
+  border-radius: .4em;
+  min-height: 160px;
+  padding: 1.25rem;
 }
 
-.insturment-button:active{
-  img{
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: white;
+  border-left: 0;
+  margin-top: -20px;
+  margin-left: -20px;
+}
+
+.insturment-button {
+  height: 60vh
+}
+
+.insturment-button:active {
+  img {
     width: 80%;
     height: 80%;
   }
@@ -56,14 +84,25 @@ body {
 }
 
 
-
 @keyframes pulse_animation {
-  0% { transform: scale(1); }
-  30% { transform: scale(0.8); }
-  40% { transform: scale(1.08); }
-  50% { transform: scale(1); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.8);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  50% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 h1, h2, h3, h4, h5 {
