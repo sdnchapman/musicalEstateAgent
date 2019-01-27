@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import MIDISounds from 'midi-sounds-react';
 import { state } from "../../../common/gameConstants";
+import Motivation from "./Motivation";
 
 const trumpets_hard_notes = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0, 78, 0, 71, 0, 74, 0, 66, 0, 0, 74, 0, 0, 73, 0, 0, 0, 0, 0, 61, 0, 74, 0, 0, 0];
 const strings_hard_notes = [0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 78, 0, 79, 0, 73, 0, 73, 0, 69, 62, 0, 0, 66, 0, 0, 69, 0, 0, 66, 0, 0, 69, 0, 0, 69, 0, 0];
@@ -23,7 +24,8 @@ export default class Instrument extends Component {
       songId: 0,
       timeTillStart: 0,
       instrument: 1,
-      notes: []
+      notes: [],
+      motivation: <Motivation/>
     };
     this.time = 0;
     this.lastTime = 0;
@@ -154,9 +156,6 @@ export default class Instrument extends Component {
     const { team } = this.state;
     return (
       <React.Fragment>
-        <div className="container mt-4 p-4 bg-primary">
-          <h4>Only thing better than a beautiful instrument, is a golf club. ⛳</h4>
-        </div>
         <div className="container mb-4 p-4 bg-white">
           <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
           <div>
@@ -172,6 +171,7 @@ export default class Instrument extends Component {
             </h1>
           )}
         </div>
+        {this.state.motivation}
       </React.Fragment>
     );
   }

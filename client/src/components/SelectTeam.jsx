@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
+import Motivation from "./Motivation";
 
 class SelectTeam extends Component {
   constructor(props) {
@@ -74,9 +75,7 @@ class SelectTeam extends Component {
             </button>
           </div>
         </div>
-        <div className="container mt-4 mb-4 p-4 bg-dark text-light">
-          <p><span class="font-italic font-weight-bold">Remember! Team building activities are not just essential, they are fun</span> 👍</p>
-        </div>
+        <Motivation />
       </React.Fragment>
     )
   }

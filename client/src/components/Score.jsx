@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
 import VIP from "./VIP";
 import ScoreBall from "./ScoreBall";
+import Motivation from "./Motivation";
 
 export default class Score extends Component {
   constructor(props) {
@@ -102,6 +103,7 @@ export default class Score extends Component {
               )
           }
         </div>
+        <Motivation />
       </React.Fragment>
     );
   }

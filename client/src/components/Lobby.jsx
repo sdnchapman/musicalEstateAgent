@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {state} from "../../../common/gameConstants";
 import VIP from "./VIP";
+import Motivation from "./Motivation";
 
 const adjectives = [
   'charming',
@@ -152,6 +153,7 @@ export default class Lobby extends Component {
             }
           </div>
         </div>
+        <Motivation />
       </React.Fragment>
     );
   }
