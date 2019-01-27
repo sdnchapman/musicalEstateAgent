@@ -137,6 +137,7 @@ export default class Instrument extends Component {
   }
 
   render() {
+    const {team} = this.state;
     return (
       <React.Fragment>
         <div className="container mt-4 p-4 bg-primary">
@@ -145,7 +146,11 @@ export default class Instrument extends Component {
         <div className="container mb-4 p-4 bg-white">
           <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
           <div>
-            <button className="btn btn-dark text-light" onClick={() => this.onClick()}>Make the sound!</button>
+            <button className="btn text-light insturment-button" onClick={() => this.onClick()}>
+            {team == "RED" ? <img src="/trumpet.png" className="col-md-6 col-xs-12"/>:""}
+            {team == "GREEN" ? <img src="/violin.png" className="col-md-6 col-xs-12"/>:""}
+            {team == "BLUE" ? <img src="/bass.png" className="col-md-6 col-xs-12"/>:""}
+            </button>
           </div>
           {this.state.timeTillStart >= 0 && (
             <h1>
