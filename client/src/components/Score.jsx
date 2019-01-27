@@ -4,6 +4,36 @@ import VIP from "./VIP";
 import ScoreBall from "./ScoreBall";
 import Motivation from "./Motivation";
 
+const adjectives = [
+  'Amazing',
+  'Wonderful',
+  'Fantastic',
+  'Clean',
+  'Great',
+  'Musical',
+  'Technical',
+  'Fun',
+  'Inspiring',
+  'Creative',
+  'Impressive',
+  'Astonishing',
+  'Astounding',
+  'Brilliant',
+  'Formidable',
+  'Glorious',
+  'Grandiose',
+  'Heroic',
+  'Imposing',
+  'Lofty',
+  'Majestic',
+  'Noble',
+  'Moving'
+]
+
+const getRandomAdjective = () => {
+  return adjectives[Math.floor(Math.random() * adjectives.length)];
+};
+
 export default class Score extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +50,7 @@ export default class Score extends Component {
     this.requestScore = this.requestScore.bind(this);
     this.changeVip = this.changeVip.bind(this);
   }
+
 
   componentDidMount() {
     setTimeout(() => {
@@ -70,7 +101,7 @@ export default class Score extends Component {
     return (
       <React.Fragment>
         <div className="container mt-4 mb-4 p-4 bg-warning">
-          <h2>Congrats! What an amazing performance!</h2>
+          <h2>Congratulations! {getRandomAdjective()} performance!</h2>
         </div>
         <div className="container mt-4 mb-4 p-4 bg-dark text-light">
           <h4>It isn't all about the individual ... but you did score:</h4>
