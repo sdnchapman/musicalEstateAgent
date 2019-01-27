@@ -9,30 +9,58 @@ const housePictures = [
   'livingroom',
 ];
 
+const houseTypes = [
+  'riverboat',
+  'mansion',
+  'semi-detached',
+  'converted council',
+  'terrace',
+  'loft conversion',
+  'barn conversion',
+  'assisted living '
+];
+
 const getRandomHouseImagePath = () => {
   return '/' + housePictures[Math.floor(Math.random() * housePictures.length)] + '.jpg';
+};
+
+const getRandomHouseType = () => {
+  return houseTypes[Math.floor(Math.random() * houseTypes.length)];
 };
 
 export default class Lobby extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      playerCount: 0,
+    };
+
     this.changeVip = this.changeVip.bind(this);
     this.onConductorSetup = this.onConductorSetup.bind(this);
     this.onMusicianSetup = this.onMusicianSetup.bind(this);
     this.onEverybodyReady = this.onEverybodyReady.bind(this);
+    this.onPlayerCountChange = this.onPlayerCountChange.bind(this);
   }
 
   componentWillMount() {
     socket.on(state.NEW_VIP, this.changeVip);
     socket.on(state.MUSICIAN_SETUP, this.onMusicianSetup);
     socket.on(state.CONDUCTOR_SETUP, this.onConductorSetup);
+    socket.on(state.PLAYER_COUNT, this.onPlayerCountChange);
   }
 
   componentWillUnmount() {
     socket.removeListener(state.NEW_VIP, this.changeVip);
     socket.removeListener(state.MUSICIAN_SETUP, this.onMusicianSetup);
     socket.removeListener(state.CONDUCTOR_SETUP, this.onConductorSetup);
+    socket.removeListener(state.PLAYER_COUNT, this.onPlayerCountChange);
+  }
+
+  onPlayerCountChange(playerCount) {
+    this.setState({
+      playerCount,
+    });
   }
 
   changeVip(response) {
@@ -55,9 +83,7 @@ export default class Lobby extends Component {
   }
 
   render() {
-    const houseNumber = parseInt(Math.random() * 10);
-    let houseType = Math.random() > 0.5 ? 'semi-detached' : 'detached';
-    houseType = Math.random() > 0.7 ? houseType : 'bungalow';
+    const { playerCount } = this.state;
     return (
       <React.Fragment>
         <div className="row">
@@ -68,7 +94,7 @@ export default class Lobby extends Component {
         <div className="p-4 bg-white">
           <div className="container">
             <h1 className="text-secondary">
-              {`${houseNumber} bedroom ${houseType} Lobby`}
+              {`${playerCount} bedroom ${getRandomHouseType()} Lobby`}
             </h1>
             {
               window.isVip ? (
