@@ -21,6 +21,18 @@ const adjectives = [
   'centrally located',
   'dank',
   'open plan',
+  'shiny',
+  'scrappy',
+  'haunted',
+  'smelly',
+  'damp',
+  'cozy',
+  'airy',
+  'rural',
+  'morden',
+  'avant-garde',
+  'functional',
+  'budget',
 ];
 
 const housePictures = [
@@ -59,7 +71,25 @@ const houseTypes = [
   'terrace',
   'loft conversion',
   'barn conversion',
-  'assisted living '
+  'assisted living ',
+  'hut',
+  'cottage',
+  'ranch',
+  'castle',
+  'longhouse',
+  'igloo',
+  'log cabin',
+  'trench',
+  'teepee',
+  'tent',
+  'tree ',
+  'mobile',
+  'garage',
+  'apartment',
+  'eco',
+  'bunker',
+  'shack',
+  'basement'
 ];
 
 const getRandomHouseImagePath = () => {
