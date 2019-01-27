@@ -67,6 +67,7 @@ export default class Login extends Component {
         <div className="row shadow-lg p-4 mt-4 bg-info text-light">
           <div className="col-8">
             <h1>Set to be the first Grammy Award Winning Estate Agents</h1>
+            <p>Our system has been live for {Math.floor(Math.random()*100+2)} {['seconds','days','weeks','months','years','decades'][Math.round(Math.random()*5)]}!</p>
           </div>
           <div className="col-4 text-center">
             <span style={{'font-size': '4rem'}}>
