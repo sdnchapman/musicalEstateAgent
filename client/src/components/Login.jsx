@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {state} from '../../../common/gameConstants';
+import Reviews from "./Reviews";
 
 export default class Login extends Component {
   constructor(props) {
@@ -81,18 +82,11 @@ export default class Login extends Component {
             <p className="text-secondary">C major improvements in your property valuations! 💸 They will be Alto this world. 🌍</p>
           </div>
         </div>
-        <div className="row shadow-lg p-4 mt-4 bg-secondary text-light">
-          <div className="col-6 col-md-3">
-            <h3>Reviews*</h3>
-            <span>(* May not directly apply to our product or service)</span>
-          </div>
-          <div className="col-6 col-md-9">
-            <div className="speech-bubble">Very pleased with the quality of these bricks, although a little expensive.</div>
-          </div>
-        </div>
+        <Reviews />
         <div className="row shadow-lg p-4 mt-4 bg-white">
-          <div className="col-12">
-            <h4>A Global Game Jame 2019 Project</h4>
+          <div className="col-12 mb-2">
+            <h4 className="mb-0">A Global Game Jam 2019 Project</h4>
+            <a href="https://globalgamejam.org/2019/games/musical-estate-agent">Find out more here!</a>
           </div>
           <div className="col-6 col-md-3">
             <h5>Residential Property</h5>
