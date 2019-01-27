@@ -6,9 +6,9 @@ const trumpets_hard_notes = [0, 62, 0, 0, 61, 0, 0, 62, 0, 0, 61, 0, 0, 0, 81, 0
 const strings_hard_notes = [0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 66, 0, 0, 78, 0, 79, 0, 73, 0, 73, 0, 69, 62, 0, 0, 66, 0, 0, 69, 0, 0, 66, 0, 0, 69, 0, 0, 69, 0, 0];
 const bass_hard_notes = [43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 0, 0, 38, 0, 0, 43, 50, 0, 38, 49, 0, 43, 0, 0, 38, 0, 0, 0, 0, 38, 0];
 
-const trumpets_easy_notes = [60, 0, 64, 59, 0, 57, 0, 0, 0, 0, 0, 0, 55, 0, 57, 0];
-const strings_easy_notes = [0, 0, 0, 0, 0, 0, 0, 69, 0, 76, 0, 79, 71, 0, 0, 0];
-const bass_easy_notes = [0, 0, 64, 59, 0, 45, 0, 0, 0, 40, 0, 0, 0, 0, 45, 0];
+const trumpets_easy_notes = [0, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 0, 81, 0, 84, 0, 83, 0, 81, 0, 64, 0, 0, 0, 0, 0, 0, 0, 81, 0, 76, 0, 0, 0, 0, 0, 81, 0];
+const strings_easy_notes = [0, 0, 0, 0, 72, 0, 69, 0, 0, 0, 71, 0, 79, 0, 76, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 64, 0, 84, 0, 0, 0, 86, 0, 84, 0, 69, 0];
+const bass_easy_notes = [57, 0, 59, 0, 60, 0, 0, 0, 57, 0, 59, 0, 60, 0, 0, 0, 57, 0, 59, 0, 60, 0, 0, 0, 57, 0, 59, 0, 60, 0, 0, 0, 57, 0, 59, 0, 60, 0, 0, 0];
 
 
 export default class Instrument extends Component {
@@ -148,6 +148,7 @@ export default class Instrument extends Component {
   }
 
   render() {
+    const {team} = this.state;
     return (
       <React.Fragment>
         <div className="container mt-4 p-4 bg-primary">
@@ -156,7 +157,11 @@ export default class Instrument extends Component {
         <div className="container mb-4 p-4 bg-white">
           <div style={{ visibility: 'hidden', position: 'absolute' }}><MIDISounds ref={(ref) => (this.midiSounds = ref)} appElementName="root" /></div>
           <div>
-            <button className="btn btn-dark text-light" onClick={() => this.onClick()}>Make the sound!</button>
+            <button className="btn text-light insturment-button" onClick={() => this.onClick()}>
+            {team == "RED" ? <img src="/trumpet.png" className="col-md-6 col-xs-12"/>:""}
+            {team == "GREEN" ? <img src="/violin.png" className="col-md-6 col-xs-12"/>:""}
+            {team == "BLUE" ? <img src="/bass.png" className="col-md-6 col-xs-12"/>:""}
+            </button>
           </div>
           {this.state.timeTillStart >= 0 && (
             <h1>
